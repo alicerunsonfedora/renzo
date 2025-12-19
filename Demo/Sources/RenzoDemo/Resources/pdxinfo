@@ -1,0 +1,5 @@
+name=Renzo Demo
+author=Marquis Kurt
+description=A demonstration of the Renzo library
+bundleID=net.marquiskurt.renzo-demo
+imagePath=
