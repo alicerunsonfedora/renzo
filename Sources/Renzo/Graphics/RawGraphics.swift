@@ -51,6 +51,15 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
     // NOTE(marquiskurt): Frame considered a 2D array of bits ([[0, 0, 0, 0, 0, 0, 0, 0], ...])!
     guard let frameBuffer = Graphics.getFrame() else { return }
     var bounds = RGClipRectToBounds(rect)
+    let byteOffset = UInt8(byteLength - 1)
+
+    guard case .solid(let solidColor) = color else {
+        return
+    }
+
+    if solidColor == .clear {
+        return
+    }
 
     // Divide by the byte length to access at bit level.
     bounds.minX /= byteLength
@@ -58,17 +67,29 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
 
     for y in bounds.minY..<bounds.maxY {
         for x in bounds.minX...bounds.maxX {
-            let currentPattern = frameBuffer[x + y * rowStride]
+            let sliceIndex = x + y * rowStride
+            let currentPattern = frameBuffer[sliceIndex]
+
             let sliceX = x * byteLength
+
             let minPixelX = UInt8(max(0, Int(rect.x) - sliceX))
             let maxPixelX = UInt8(min(byteLength, Int(rect.maxX) - sliceX))
 
             var bitPattern: UInt8 = currentPattern
-            for i in minPixelX..<maxPixelX {
-                // TODO(marquiskurt): Dafuq?
-                bitPattern &= ~(1 << (UInt8(byteLength - 1) - i))
+            for pixel in minPixelX..<maxPixelX {
+                let shift: UInt8 = 1 << (byteOffset - pixel)
+                switch solidColor {
+                case .black:
+                    bitPattern &= ~shift
+                case .white, .clear:
+                    bitPattern |= shift
+                case .xor:
+                    bitPattern ^= shift
+                @unknown default:
+                    bitPattern &= shift
+                }
             }
-            frameBuffer[x + y * rowStride] = bitPattern
+            frameBuffer[sliceIndex] = bitPattern
         }
     }
 }
