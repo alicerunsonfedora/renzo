@@ -10,10 +10,18 @@ import PlaydateKit
 private let byteLength = 8
 private let rowStride = 52
 
+/// A structure representing the bounds of a rectangle.
 public struct RGBounds {
+    /// The minimum X value.
     public var minX: Int
+
+    /// The minimum Y value.
     public var minY: Int
+
+    /// The maximum X value.
     public var maxX: Int
+
+    /// The maximum Y value.
     public var maxY: Int
 }
 
@@ -50,14 +58,14 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
 
     for y in bounds.minY..<bounds.maxY {
         for x in bounds.minX...bounds.maxX {
-            let sliceX = x * 8
+            let sliceX = x * byteLength
             let minPixelX = UInt8(max(0, Int(rect.x) - sliceX))
-            let maxPixelX = UInt8(min(8, Int(rect.maxX) - sliceX))
+            let maxPixelX = UInt8(min(byteLength, Int(rect.maxX) - sliceX))
 
             var bitPattern: UInt8 = 0b11111111
             for i in minPixelX..<maxPixelX {
                 // TODO(marquiskurt): Dafuq?
-                bitPattern &= ~(1 << (7 - i))
+                bitPattern &= ~(1 << (UInt8(byteLength - 1) - i))
             }
             frameBuffer[x + y * rowStride] = bitPattern
         }
