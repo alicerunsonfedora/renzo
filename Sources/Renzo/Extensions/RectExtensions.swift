@@ -7,8 +7,8 @@
 
 import PlaydateKit
 
-public extension Rect {
-    static var display: Rect {
+extension Rect {
+    public static var display: Rect {
         Rect(origin: .zero, width: Float(Display.width), height: Float(Display.height))
     }
 }

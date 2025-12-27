@@ -18,11 +18,11 @@ let package = Package(
             name: "RenzoDemo",
             type: xcode ? nil : .dynamic,
             targets: ["RenzoDemo"]
-        ),
+        )
     ],
     dependencies: [
         .package(name: "Renzo", path: "../"),
-        .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main")
+        .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -31,7 +31,7 @@ let package = Package(
             name: "RenzoDemo",
             dependencies: [
                 .product(name: "Renzo", package: "Renzo"),
-                .product(name: "PlaydateKit", package: "PlaydateKit")
+                .product(name: "PlaydateKit", package: "PlaydateKit"),
             ],
             exclude: ["Resources"],
             swiftSettings: [
@@ -41,7 +41,7 @@ let package = Package(
                     "-Xfrontend", "-disable-objc-interop",
                     "-Xfrontend", "-disable-stack-protector",
                     "-Xfrontend", "-function-sections",
-                    "-Xcc", "-DTARGET_EXTENSION"
+                    "-Xcc", "-DTARGET_EXTENSION",
                 ]),
             ],
         )

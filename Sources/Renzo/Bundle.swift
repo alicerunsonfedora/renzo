@@ -47,6 +47,6 @@ public class Bundle {
     }
 }
 
-public extension Bundle {
-    static var main: Bundle { Bundle() }
+extension Bundle {
+    public static var main: Bundle { Bundle() }
 }

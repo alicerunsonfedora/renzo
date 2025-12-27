@@ -32,7 +32,7 @@ open class SceneRenderer {
     /// Whether the renderer needs to sort the model's faces relative to the current camera position.
     ///
     /// This can be enabled whenever the projection is a ``PerspectiveProjection`` through ``setNeedsFaceSorting()``.
-    public private(set) var needsFaceSorting = false 
+    public private(set) var needsFaceSorting = false
 
     /// Whether the renderer needs to sort the objects in the scene relative to the current camera position.
     ///
@@ -116,7 +116,8 @@ open class SceneRenderer {
     /// - Parameter index: The index of the camera to use.
     public func setCameraIfAvailable(_ index: [Camera3D].Index) {
         guard let projection = projection as? PerspectiveProjection,
-              scene.cameras.indices.contains(index) else { return }
+            scene.cameras.indices.contains(index)
+        else { return }
         projection.camera = scene.cameras[index]
         setNeedsFaceSorting()
         setNeedsObjectSorting()
@@ -154,12 +155,12 @@ open class SceneRenderer {
         for face in model {
             let worldFace = face.transformedBy(transform)
             let projectedFace = projection.project(worldFace)
-    
+
             if allowsBackfaceCulling, projectedFace.signedArea >= 0 {
                 continue
             }
             let brightness = getBrightness(of: worldFace)
-    
+
             RGFillTriangle(projectedFace, color: .dithered(by: brightness))
             Graphics.fillTriangle(projectedFace, color: .dithered(by: brightness))
         }
@@ -167,12 +168,12 @@ open class SceneRenderer {
 
     private func getBrightness(of face: TriFace3D) -> Float {
         var brightness: Float = 0
-    
+
         for light in scene.lights {
             let lightOffset = (light - face.centroid).normalized()
             brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
         }
-    
+
         return brightness
     }
 
@@ -181,7 +182,7 @@ open class SceneRenderer {
             needsObjectSorting = false
             return
         }
-    
+
         model.sort { [projection] faceA, faceB in
             let cameraPos = projection.camera.position
             let faceADist = faceA.centroid.squaredDistance(to: cameraPos)
@@ -213,7 +214,7 @@ open class SceneRenderer {
             projection.camera = scene.cameras[0]
         }
     }
-    
+
     private func didChangeFrame() {
         if let projection = projection as? PerspectiveProjection {
             projection.frame = self.frame

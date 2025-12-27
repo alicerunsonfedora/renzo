@@ -43,7 +43,7 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
     // NOTE(marquiskurt): Frame considered a 2D array of bits ([[0, 0, 0, 0, 0, 0, 0, 0], ...])!
     guard let frameBuffer = Graphics.getFrame() else { return }
     var bounds = RGClipRectToBounds(rect)
- 
+
     // Divide by the byte length to access at bit level.
     bounds.minX /= byteLength
     bounds.maxX /= byteLength
@@ -57,7 +57,7 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
             var bitPattern: UInt8 = 0b11111111
             for i in minPixelX..<maxPixelX {
                 // TODO(marquiskurt): Dafuq?
-                bitPattern &= ~(1 << (7-i))
+                bitPattern &= ~(1 << (7 - i))
             }
             frameBuffer[x + y * rowStride] = bitPattern
         }

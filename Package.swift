@@ -9,11 +9,11 @@ var swiftFlags = [
     "-Xfrontend", "-disable-objc-interop",
     "-Xfrontend", "-disable-stack-protector",
     "-Xfrontend", "-function-sections",
-    "-Xcc", "-DTARGET_EXTENSION"
+    "-Xcc", "-DTARGET_EXTENSION",
 ]
 
 #if RELEASE
-swiftFlags.append(contentsOf: ["-Xfrontend", "-gline-tables-only"])
+    swiftFlags.append(contentsOf: ["-Xfrontend", "-gline-tables-only"])
 #endif
 
 let package = Package(
@@ -24,7 +24,7 @@ let package = Package(
         .library(
             name: "Renzo",
             targets: ["Renzo"]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main")
