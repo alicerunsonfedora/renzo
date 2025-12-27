@@ -58,11 +58,12 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
 
     for y in bounds.minY..<bounds.maxY {
         for x in bounds.minX...bounds.maxX {
+            let currentPattern = frameBuffer[x + y * rowStride]
             let sliceX = x * byteLength
             let minPixelX = UInt8(max(0, Int(rect.x) - sliceX))
             let maxPixelX = UInt8(min(byteLength, Int(rect.maxX) - sliceX))
 
-            var bitPattern: UInt8 = 0b11111111
+            var bitPattern: UInt8 = currentPattern
             for i in minPixelX..<maxPixelX {
                 // TODO(marquiskurt): Dafuq?
                 bitPattern &= ~(1 << (UInt8(byteLength - 1) - i))
