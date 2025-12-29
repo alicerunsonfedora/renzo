@@ -7,21 +7,19 @@
 
 import PlaydateKit
 
-/// A representation of a point in two-dimensional space.
-public typealias Point2D = PlaydateKit.Point
 
 /// A representation of a triangular face in two-dimensional space.
 public struct RGTriangle: Equatable {
     /// The first point of the face.
-    public var pointA: Point2D
+    public var pointA: Point
 
     /// The second point of the face.
-    public var pointB: Point2D
+    public var pointB: Point
 
     /// The third point of the face.
-    public var pointC: Point2D
+    public var pointC: Point
 
-    public init(a pointA: Point2D, b pointB: Point2D, c pointC: Point2D) {
+    public init(a pointA: Point, b pointB: Point, c pointC: Point) {
         self.pointA = pointA
         self.pointB = pointB
         self.pointC = pointC
@@ -71,12 +69,10 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
         return
     }
     let sortedTri = RGSortTriangle(tri)
-
     if sortedTri.pointB.y == sortedTri.pointC.y {
         RGFillBottomTriangle(sortedTri, color: color, into: &frameBuffer)
         return
     }
-
     if sortedTri.pointA.y == sortedTri.pointB.y {
         RGFillTopTriangle(sortedTri, color: color, into: &frameBuffer)
         return
@@ -91,12 +87,21 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
 }
 
 func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout UnsafeMutablePointer<UInt8>) {
-    let invertSlopeA = (tri.pointB.x - tri.pointA.x) / (tri.pointB.y - tri.pointA.y)
-    let invertSlopeB = (tri.pointC.x - tri.pointA.x) / (tri.pointC.y - tri.pointA.y)
+    let top = tri.pointA
+    var (left, right) = (tri.pointB, tri.pointC)
 
-    var (currentX_1, currentX_2) = (tri.pointA.x, tri.pointA.x)
-    for scanlineY in Int(tri.pointA.y)...Int(tri.pointB.y) {
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: (currentX_2 - currentX_1), height: 1)
+    if left.x > right.x {
+        let originalRight = right
+        right = left
+        left = originalRight
+    }
+
+    let invertSlopeA = (left.x - top.x) / (left.y - top.y)
+    let invertSlopeB = (right.x - top.x) / (right.y - top.y)
+
+    var (currentX_1, currentX_2) = (top.x, top.x)
+    for scanlineY in Int(top.y)...Int(left.y) {
+        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: currentX_2 - currentX_1, height: 1)
         RGFillRect(rect, color: color, into: &frameBuffer)
         currentX_1 += invertSlopeA
         currentX_2 += invertSlopeB
@@ -104,12 +109,21 @@ func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frame
 }
 
 func RGFillTopTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout UnsafeMutablePointer<UInt8>) {
-    let invertSlopeA = (tri.pointC.x - tri.pointA.x) / (tri.pointC.y - tri.pointA.y)
-    let invertSlopeB = (tri.pointC.x - tri.pointB.x) / (tri.pointC.y - tri.pointB.y)
+    let top = tri.pointA
+    var (left, right) = (tri.pointB, tri.pointC)
     
-    var (currentX_1, currentX_2) = (tri.pointC.x, tri.pointC.x)
-    for scanlineY in stride(from: tri.pointC.y, to: tri.pointA.y, by: -1) {
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: (currentX_2 - currentX_1), height: 1)
+    if left.x > right.x {
+        let originalRight = right
+        right = left
+        left = originalRight
+    }
+
+    let invertSlopeA = (right.x - top.x) / (right.y - top.y)
+    let invertSlopeB = (top.x - left.x) / (top.y - left.y)
+    
+    var (currentX_1, currentX_2) = (top.x, top.x)
+    for scanlineY in stride(from: Int(top.y), to: Int(top.y - 1), by: -1) {
+        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: currentX_2 - currentX_1, height: 1)
         RGFillRect(rect, color: color, into: &frameBuffer)
         currentX_1 -= invertSlopeA
         currentX_2 -= invertSlopeB

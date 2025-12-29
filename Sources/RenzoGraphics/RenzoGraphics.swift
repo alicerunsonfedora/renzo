@@ -26,12 +26,14 @@ public func RGFillRect(_ rect: Rect, color: Graphics.Color = .black) {
 /// - Parameter color: The color to fill the region with.
 /// - Parameter frameBuffer: The frame buffer to draw the rectangle into.
 func RGFillRect(_ rect: Rect, color: Graphics.Color = .black, into frameBuffer: inout UnsafeMutablePointer<UInt8>) {
+    guard rect.width > 0, rect.height > 0 else { return }
     // NOTE(marquiskurt): Frame considered a 2D array of bits ([[0, 0, 0, 0, 0, 0, 0, 0], ...])!
     var bounds = RGClipRectToBounds(rect)
     let byteOffset = UInt8(byteLength - 1)
 
     // A clear color effectively does nothing, so we can avoid going through the frame buffer entirely.
     if case .solid(let solidColor) = color, solidColor == .clear {
+        print("There's a clear color set here. This does nothing.")
         return
     }
 
