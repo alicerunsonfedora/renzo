@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoGraphics
 
 /// A renderer capable of rendering three-dimensional scenes.
 ///
@@ -160,8 +161,7 @@ open class SceneRenderer {
                 continue
             }
             let brightness = getBrightness(of: worldFace)
-
-            RGFillTriangle(projectedFace, color: .dithered(by: brightness))
+            // RGFillTriangle(projectedFace, color: .dithered(by: brightness))
             Graphics.fillTriangle(projectedFace, color: .dithered(by: brightness))
         }
     }

@@ -23,7 +23,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Renzo",
-            targets: ["Renzo"]
+            targets: ["Renzo", "RenzoGraphics"]
         )
     ],
     dependencies: [
@@ -33,9 +33,20 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "Renzo",
+            name: "RenzoGraphics",
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit")
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("Embedded"),
+                .unsafeFlags(swiftFlags),
+            ],
+        ),
+        .target(
+            name: "Renzo",
+            dependencies: [
+                .product(name: "PlaydateKit", package: "PlaydateKit"),
+                "RenzoGraphics"
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Embedded"),
