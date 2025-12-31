@@ -46,12 +46,12 @@ let package = Package(
             name: "Renzo",
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
-                "RenzoGraphics"
+                "RenzoGraphics",
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Embedded"),
                 .unsafeFlags(swiftFlags),
             ],
-        )
+        ),
     ]
 )

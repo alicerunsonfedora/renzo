@@ -7,7 +7,6 @@
 
 import PlaydateKit
 
-
 /// A representation of a triangular face in two-dimensional space.
 public struct RGTriangle: Equatable {
     /// The first point of the face.
@@ -83,10 +82,15 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
     let cutter = Point(x: sortedTri.pointA.x + deltaY * deltaX, y: sortedTri.pointB.y)
 
     RGFillTopTriangle(RGTriangle(a: sortedTri.pointB, b: cutter, c: sortedTri.pointC), color: color, into: &frameBuffer)
-    RGFillBottomTriangle(RGTriangle(a: sortedTri.pointA, b: sortedTri.pointB, c: cutter), color: color, into: &frameBuffer)
+    RGFillBottomTriangle(
+        RGTriangle(a: sortedTri.pointA, b: sortedTri.pointB, c: cutter), color: color, into: &frameBuffer)
 }
 
-func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout UnsafeMutablePointer<UInt8>) {
+/// Fills a triangle with a flat bottom a given color.
+/// - Parameter tri: The triangle that will be filled on the screen.
+/// - Parameter color: The color to fill the triangle with.
+/// - Parameter frameBuffer: The frame buffer the triangle will be filled into.
+func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     let top = tri.pointA
     var (left, right) = (tri.pointB, tri.pointC)
 
@@ -108,10 +112,14 @@ func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frame
     }
 }
 
-func RGFillTopTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout UnsafeMutablePointer<UInt8>) {
+/// Fills a triangle with a flat top a given color.
+/// - Parameter tri: The triangle that will be filled on the screen.
+/// - Parameter color: The color to fill the triangle with.
+/// - Parameter frameBuffer: The frame buffer the triangle will be filled into.
+func RGFillTopTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     let bottom = tri.pointC
     var (left, right) = (tri.pointA, tri.pointB)
-    
+
     if left.x > right.x {
         let originalRight = right
         right = left
@@ -120,7 +128,7 @@ func RGFillTopTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuf
 
     let invertSlopeA = (bottom.x - left.x) / (bottom.y - left.y)
     let invertSlopeB = (bottom.x - right.x) / (bottom.y - right.y)
-    
+
     var (currentX_1, currentX_2) = (bottom.x, bottom.x)
     for scanlineY in stride(from: Int(bottom.y), to: Int(left.y), by: -1) {
         let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: currentX_2 - currentX_1, height: 1)
