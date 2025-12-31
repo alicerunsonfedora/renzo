@@ -47,6 +47,13 @@ public class Bundle {
     }
 }
 
+// swiftlint:disable discouraged_direct_init
+
 extension Bundle {
-    public static var main: Bundle { Bundle() }
+    public static var main: Bundle {
+        let bundle = Bundle()
+        return bundle
+    }
 }
+
+// swiftlint:enable discouraged_direct_init

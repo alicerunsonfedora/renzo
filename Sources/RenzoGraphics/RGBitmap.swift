@@ -1,9 +1,11 @@
-///
+//
 //  RGBitmap.swift
 //  Renzo
 //
 //  Created by Marquis Kurt on 29-12-2025.
 //
+
+// swiftlint:disable large_tuple
 
 /// A typealias representing a pattern of bits.
 typealias BitPattern = (UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8)
@@ -23,3 +25,5 @@ func RGGetBitPatternRow(_ bitmap: BitPattern, row: Int) -> UInt8 {
     default: bitmap.0
     }
 }
+
+// swiftlint:enable large_tuple

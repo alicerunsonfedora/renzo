@@ -1,0 +1,45 @@
+opt_in_rules:
+  - explicit_init
+disabled_rules:
+  - trailing_comma
+
+allow_zero_lintable_files: false
+check_for_updates: true
+
+included:
+  Sources/
+
+explicit_init:
+  severity: warning
+  include_bare_init: true
+force_cast: warning
+force_try:
+  severity: warning
+line_length: 120
+type_body_length:
+  - 300
+  - 400
+file_length:
+  warning: 500
+  error: 1200
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 40
+    error: 50
+  allowed_symbols: ["_"]
+identifier_name:
+  allowed_symbols: ["_"]
+  min_length:
+    error: 2
+  excluded:
+    - w
+    - x
+    - y
+    - z
+    - up
+    - id
+    - URL
+
+reporter: "xcode"
