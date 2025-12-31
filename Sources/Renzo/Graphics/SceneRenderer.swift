@@ -65,7 +65,7 @@ open class SceneRenderer {
 
     /// Create a renderer for a scene in a given frame, relying on perspective projection.
     /// - Parameter scene: The scene the renderer will display.
-    /// - Parameter crame: The frame that the scene will be rendered in.
+    /// - Parameter frame: The frame that the scene will be rendered in.
     public init(scene: Scene3D, frame: Rect = .display) {
         self.scene = scene
         self.projection = PerspectiveProjection(camera: scene.cameras[0], rect: frame)
@@ -161,8 +161,7 @@ open class SceneRenderer {
                 continue
             }
             let brightness = getBrightness(of: worldFace)
-            // RGFillTriangle(projectedFace, color: .dithered(by: brightness))
-            Graphics.fillTriangle(projectedFace, color: .dithered(by: brightness))
+            RGFillTriangle(projectedFace, color: .dithered(by: brightness))
         }
     }
 

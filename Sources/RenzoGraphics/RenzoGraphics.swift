@@ -43,33 +43,50 @@ func RGFillRect(_ rect: Rect, color: Graphics.Color = .black, into frameBuffer: 
 
     for y in bounds.minY..<bounds.maxY {
         let patternRowIndex = y % 8
-        var bitmapRow: UInt8 = 255
+        var patternBitmap: UInt8 = 255
+        var patternBitmask: UInt8 = 0
+
         if case .pattern(let bitmap, let mask) = color {
-            bitmapRow = RGGetBitPatternRow(bitmap, row: patternRowIndex)
-            let maskRow = RGGetBitPatternRow(mask, row: patternRowIndex)
-            bitmapRow ^= maskRow
+            patternBitmap = RGGetBitPatternRow(bitmap, row: patternRowIndex)
+            patternBitmask = RGGetBitPatternRow(mask, row: patternRowIndex)
         }
 
         for x in bounds.minX...bounds.maxX {
             let sliceIndex = x + y * rowStride
-            let currentPattern = frameBuffer[sliceIndex]
-
+            var currentPattern = frameBuffer[sliceIndex]
             let sliceX = x * byteLength
-
             let minPixelX = UInt8(max(0, Int(rect.x) - sliceX))
             let maxPixelX = UInt8(min(byteLength, Int(rect.maxX) - sliceX))
 
-            var newPattern: UInt8 = currentPattern
+            var bitmask: UInt8 = 0
             for pixel in minPixelX..<maxPixelX {
                 let shift: UInt8 = 1 << (byteOffset - pixel)
-                switch color {
-                case .solid(let solidColor):
-                    RGSetBitSolidColor(&newPattern, color: solidColor, shift: shift)
-                case .pattern:
-                    newPattern ^= bitmapRow & shift
-                }
+                bitmask |= shift
             }
-            frameBuffer[sliceIndex] = newPattern
+
+            switch color {
+            case .solid(.black):
+                currentPattern &= ~bitmask
+                let colorPattern: UInt8 = 0b00000000
+                let trimmedPattern = (bitmask & colorPattern)
+                frameBuffer[sliceIndex] = currentPattern | trimmedPattern
+            case .solid(.white), .solid(.clear):
+                currentPattern &= ~bitmask
+                let colorPattern: UInt8 = 0b11111111
+                let trimmedPattern = (bitmask & colorPattern)
+                frameBuffer[sliceIndex] = currentPattern | trimmedPattern
+            case .solid(.xor):
+                let colorPattern: UInt8 = 0b11111111
+                let trimmedPattern = (bitmask & colorPattern)
+                frameBuffer[sliceIndex] = currentPattern ^ trimmedPattern
+            case .pattern:
+                bitmask &= patternBitmask
+                currentPattern &= ~bitmask
+                let trimmedPattern = (bitmask & patternBitmap)
+                frameBuffer[sliceIndex] = currentPattern | trimmedPattern
+            @unknown default:
+                break
+            }
         }
     }
 }
