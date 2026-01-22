@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoFoundation
 
 extension Scene3D {
     /// Create a scene by reading a scene file from the game's resources.

@@ -26,16 +26,27 @@ public struct RGBounds {
 /// - Parameter rect: The rectangle to clip to the display's bounds.
 /// - Returns: The rectangle expressed as bounds inside the Playdate's screen.
 public func RGClipRectToBounds(_ rect: Rect) -> RGBounds {
-    let rectMinX = Int(max(0, rect.x))
+    var rectMinX = Int(max(0, rect.x))
     var rectMaxX = Int(rect.maxX)
+    var rectMinY = Int(max(0, rect.y))
+    var rectMaxY = Int(rect.maxY)
+
     if rectMaxX >= Display.width {
         rectMaxX = Display.width - 1
     }
+    if rectMinX > rectMaxX {
+        let original = rectMaxX
+        rectMaxX = rectMinX
+        rectMinX = original
+    }
 
-    let rectMinY = Int(max(0, rect.y))
-    var rectMaxY = Int(rect.maxY)
     if rectMaxY >= Display.height {
         rectMaxY = Display.height - 1
+    }
+    if rectMinY > rectMaxY {
+        let original = rectMaxY
+        rectMaxY = rectMinY
+        rectMinY = original
     }
 
     return RGBounds(minX: rectMinX, minY: rectMinY, maxX: rectMaxX, maxY: rectMaxY)

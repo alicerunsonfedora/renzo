@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoFoundation
 import RenzoGraphics
 
 /// A renderer capable of rendering three-dimensional scenes.
@@ -147,7 +148,7 @@ open class SceneRenderer {
                     worldScale: model.scale)
                 sceneObjects.append(child)
             } catch {
-                print("[ERR]: Failed to load model named '\(model.name)'")
+                RFReportError("Failed to load model named '\(model.name)'.")
             }
         }
     }

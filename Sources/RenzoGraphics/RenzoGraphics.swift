@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoFoundation
 
 private let byteLength = 8
 private let rowStride = 52
@@ -56,7 +57,7 @@ func RGFillRect(_ rect: Rect, color: Graphics.Color = .black, into frameBuffer: 
 
     // A clear color effectively does nothing, so we can avoid going through the frame buffer entirely.
     if case .solid(let solidColor) = color, solidColor == .clear {
-        print("There's a clear color set here. This does nothing.")
+        RFReportWarning("Filling a rectangle with a clear color does nothing.")
         return
     }
 
