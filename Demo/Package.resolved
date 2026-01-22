@@ -1,5 +1,5 @@
 {
-  "originHash" : "82cf63e694cc539ed9b43444180a64be776dcc8b16b12e99c2287e37a06d01f5",
+  "originHash" : "e3040dfd977c843b026e8b84e3a0550cddf636e73d841acf351ef53ead9cf7e4",
   "pins" : [
     {
       "identity" : "playdatekit",
@@ -7,7 +7,16 @@
       "location" : "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "5cd6b6cca89cc8d2a425f01ec8862bb0c94af34f"
+        "revision" : "05b68755a1acfa5498ed10a3f00c75576c890d72"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
       }
     }
   ],
