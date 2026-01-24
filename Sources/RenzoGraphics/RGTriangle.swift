@@ -136,7 +136,7 @@ func RGFillBottomFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into f
             currentX_2 += invertSlopeB
             continue
         }
-        RGDrawScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
+        RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 += invertSlopeA
         currentX_2 += invertSlopeB
     }
@@ -168,13 +168,13 @@ func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into fram
             continue
         }
 
-        RGDrawScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
+        RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 -= invertSlopeA
         currentX_2 -= invertSlopeB
     }
 }
 
-func RGDrawScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, into frameBuffer: inout RGBuffer) {
+func RGDrawTriScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, into frameBuffer: inout RGBuffer) {
     var (currentX_1, currentX_2) = (x1, x2)
     if currentX_1 > currentX_2 {
         (currentX_1, currentX_2) = (currentX_2, currentX_1)
@@ -182,8 +182,5 @@ func RGDrawScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, into f
     if currentX_2 < 0 || Int(currentX_1) >= Display.width {
         return
     }
-    let width = currentX_2 - currentX_1
-
-    let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
-    RGFillRect(rect, color: color, into: &frameBuffer)
+    RGDrawScanline(Int(currentX_1), Int(currentX_2), y: scanlineY, color: color, into: &frameBuffer)
 }
