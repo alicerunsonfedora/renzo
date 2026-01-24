@@ -111,7 +111,6 @@ func RGFillBottomFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into f
         (left.x, right.x) = (right.x, left.x)
     }
 
-    let (minX, maxX) = (left.x, right.x)
     let invertSlopeA = (left.x - top.x) / (left.y - top.y)
     let invertSlopeB = (right.x - top.x) / (right.y - top.y)
 
@@ -119,13 +118,12 @@ func RGFillBottomFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into f
     var currentX_2 = top.x
 
     for scanlineY in Int(top.y)...Int(left.y) {
-        if currentX_1 > currentX_2 {
-            (currentX_1, currentX_2) = (currentX_2, currentX_1)
+        guard (0..<Display.height).contains(scanlineY) else {
+            currentX_1 += invertSlopeA
+            currentX_2 += invertSlopeB
+            continue
         }
-        let width = currentX_2 - currentX_1
-        
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
-        RGFillRect(rect, color: color, into: &frameBuffer)
+        RGDrawScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 += invertSlopeA
         currentX_2 += invertSlopeB
     }
@@ -144,7 +142,6 @@ func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into fram
         (left.x, right.x) = (right.x, left.x)
     }
 
-    let (minX, maxX) = (left.x, right.x)
     let invertSlopeA = (bottom.x - left.x) / (bottom.y - left.y)
     let invertSlopeB = (bottom.x - right.x) / (bottom.y - right.y)
 
@@ -152,16 +149,30 @@ func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into fram
     var currentX_2 = bottom.x
 
     for scanlineY in stride(from: Int(bottom.y), to: Int(left.y) - 1, by: -1) {
-        if currentX_1 > currentX_2 {
-            (currentX_1, currentX_2) = (currentX_2, currentX_1)
+        guard (0..<Display.height).contains(scanlineY) else {
+            currentX_1 += invertSlopeA
+            currentX_2 += invertSlopeB
+            continue
         }
-        let width = currentX_2 - currentX_1
 
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
-        RGFillRect(rect, color: color, into: &frameBuffer)
+        RGDrawScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 -= invertSlopeA
         currentX_2 -= invertSlopeB
     }
+}
+
+func RGDrawScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, into frameBuffer: inout RGBuffer) {
+    var (currentX_1, currentX_2) = (x1, x2)
+    if currentX_1 > currentX_2 {
+        (currentX_1, currentX_2) = (currentX_2, currentX_1)
+    }
+    if currentX_2 < 0 || Int(currentX_1) >= Display.width {
+        return
+    }
+    let width = currentX_2 - currentX_1
+
+    let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
+    RGFillRect(rect, color: color, into: &frameBuffer)
 }
 
 private func RGValidateScanline(

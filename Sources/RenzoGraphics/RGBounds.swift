@@ -31,22 +31,18 @@ public func RGClipRectToBounds(_ rect: Rect) -> RGBounds {
     var rectMinY = Int(max(0, rect.y))
     var rectMaxY = Int(rect.maxY)
 
+    if rectMinX > rectMaxX {
+        (rectMinX, rectMaxX) = (rectMaxX, rectMinX)
+    }
     if rectMaxX >= Display.width {
         rectMaxX = Display.width - 1
     }
-    if rectMinX > rectMaxX {
-        let original = rectMaxX
-        rectMaxX = rectMinX
-        rectMinX = original
-    }
 
+    if rectMinY > rectMaxY {
+        (rectMinY, rectMaxY) = (rectMaxY, rectMinY)
+    }
     if rectMaxY >= Display.height {
         rectMaxY = Display.height - 1
-    }
-    if rectMinY > rectMaxY {
-        let original = rectMaxY
-        rectMaxY = rectMinY
-        rectMinY = original
     }
 
     return RGBounds(minX: rectMinX, minY: rectMinY, maxX: rectMaxX, maxY: rectMaxY)
