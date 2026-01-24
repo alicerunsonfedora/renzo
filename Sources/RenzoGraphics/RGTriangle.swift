@@ -53,6 +53,31 @@ func RGSortTriangle(_ tri: RGTriangle) -> RGTriangle {
     return sortedTri
 }
 
+/// Floors the X and Y components of a triangle.
+func RGFloorTriangle(_ tri: inout RGTriangle) {
+    tri.pointA.x = floorf(tri.pointA.x)
+    tri.pointB.x = floorf(tri.pointB.x)
+    tri.pointC.x = floorf(tri.pointC.x)
+
+    tri.pointA.y = floorf(tri.pointA.y)
+    tri.pointB.y = floorf(tri.pointB.y)
+    tri.pointC.y = floorf(tri.pointC.y)
+}
+
+/// Validates that a triangle can be drawn on the screen.
+///
+/// > Important: This function assumes the triangle is already sorted.
+func RGTriangleIsDrawable(_ tri: RGTriangle) -> Bool {
+    if tri.pointA.y == tri.pointC.y { return false }
+    if tri.pointA.x == tri.pointB.x, tri.pointB.x == tri.pointC.x { return false }
+    if Int(tri.pointA.y) >= Display.height || tri.pointC.y < 0 { return false }
+    if tri.pointA.x < 0, tri.pointB.x < 0, tri.pointC.x < 0 { return false }
+
+    let width = Float(Display.width)
+    if tri.pointA.x >= width, tri.pointB.x >= width, tri.pointC.x >= width { return false }
+    return true
+}
+
 /// Fills a triangle with a given color.
 /// - Parameter tri: The triangle defining the region of the screen to fill with a color.
 /// - Parameter color: The color to fill the region with.
@@ -62,21 +87,9 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
         return
     }
     var sortedTri = RGSortTriangle(tri)
-    sortedTri.pointA.x = floorf(sortedTri.pointA.x)
-    sortedTri.pointB.x = floorf(sortedTri.pointB.x)
-    sortedTri.pointC.x = floorf(sortedTri.pointC.x)
+    RGFloorTriangle(&sortedTri)
 
-    sortedTri.pointA.y = floorf(sortedTri.pointA.y)
-    sortedTri.pointB.y = floorf(sortedTri.pointB.y)
-    sortedTri.pointC.y = floorf(sortedTri.pointC.y)
-
-    if sortedTri.pointA.y == sortedTri.pointC.y { return }
-    if sortedTri.pointA.x == sortedTri.pointB.x, sortedTri.pointB.x == sortedTri.pointC.x { return }
-    if Int(sortedTri.pointA.y) >= Display.height || sortedTri.pointC.y < 0 { return }
-    if sortedTri.pointA.x < 0, sortedTri.pointB.x < 0, sortedTri.pointC.x < 0 { return }
-
-    let width = Float(Display.width)
-    if sortedTri.pointA.x >= width, sortedTri.pointB.x >= width, sortedTri.pointC.x >= width { return }
+    guard RGTriangleIsDrawable(sortedTri) else { return }
 
     if sortedTri.pointB.y == sortedTri.pointC.y {
         RGFillBottomFlatTriangle(sortedTri, color: color, into: &frameBuffer)
@@ -150,8 +163,8 @@ func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into fram
 
     for scanlineY in stride(from: Int(bottom.y), to: Int(left.y) - 1, by: -1) {
         guard (0..<Display.height).contains(scanlineY) else {
-            currentX_1 += invertSlopeA
-            currentX_2 += invertSlopeB
+            currentX_1 -= invertSlopeA
+            currentX_2 -= invertSlopeB
             continue
         }
 
@@ -173,34 +186,4 @@ func RGDrawScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, into f
 
     let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
     RGFillRect(rect, color: color, into: &frameBuffer)
-}
-
-private func RGValidateScanline(
-    x1: Float,
-    x2: Float,
-    in range: ClosedRange<Float>,
-    sourceTri: RGTriangle,
-    mode: String
-) {
-    if range.contains(x1...x2) {
-        return
-    }
-    let formattedTri = RGFormatTriangle(sourceTri)
-    RFReportWarning(
-        """
-        The range for the scanline doesn't fit within the expected triangle X ranges.
-        This might cause unexpected scanline rendering.
-            Render Mode: \(mode)
-            Expected Range: \(range.lowerBound, precision: 0)...\(range.upperBound, precision: 0)
-            Scanline Range: \(x1, precision: 0)...\(x2, precision: 0)
-            Drawn Triangle: \(formattedTri)
-        """
-    )
-}
-
-private func RGFormatTriangle(_ tri: RGTriangle) -> String {
-    let pointA = "(\(tri.pointA.x, precision: 0), \(tri.pointA.y, precision: 0))"
-    let pointB = "(\(tri.pointB.x, precision: 0), \(tri.pointB.y, precision: 0))"
-    let pointC = "(\(tri.pointC.x, precision: 0), \(tri.pointC.y, precision: 0))"
-    return "V1: \(pointA), V2: \(pointB), V3: \(pointC)"
 }
