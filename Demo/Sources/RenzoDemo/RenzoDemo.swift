@@ -1,30 +1,31 @@
+//
+//  RenzoDemo.swift
+//  Renzo
+//
+//  Created by Marquis Kurt on 24-01-2026.
+//
+
 import PlaydateKit
 import Renzo
 
 @PlaydateMain
 final class Game: PlaydateGame {
-    let renderer: SceneRenderer
+    #if Benchmarking
+        let scene: BenchmarkingScene
+    #else
+        let scene: DemoScene
+    #endif
 
     init() {
-        do {
-            let sampleScene = try Scene3D(named: "Sample")
-            self.renderer = SceneRenderer(scene: sampleScene, frame: .display)
-        } catch {
-            let scene = Scene3D(cameras: [
-                Camera3D(position: .zero, rotation: .zero, fieldOfView: 0.5)
-            ])
-            self.renderer = SceneRenderer(scene: scene, frame: .display)
-        }
+        #if Benchmarking
+            scene = BenchmarkingScene()
+        #else
+            scene = DemoScene()
+        #endif
     }
 
     func update() -> Bool {
-        do {
-            let image = try Graphics.Bitmap(path: "Resources/Background")
-            Graphics.drawBitmap(image, at: .zero)
-        } catch {
-            print("Failed to load background image.")
-        }
-        renderer.render()
+        scene.update()
         return true
     }
 }

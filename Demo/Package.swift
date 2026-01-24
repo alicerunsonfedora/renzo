@@ -20,8 +20,12 @@ let package = Package(
             targets: ["RenzoDemo"]
         )
     ],
+    traits: [
+        .default(enabledTraits: []),
+        .trait(name: "Benchmarking"),
+    ],
     dependencies: [
-        .package(name: "Renzo", path: "../"),
+        .package(name: "Renzo", path: "../", traits: ["CustomizedRendering"]),
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
     ],
     targets: [

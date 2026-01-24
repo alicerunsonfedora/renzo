@@ -89,6 +89,39 @@ open class SceneRenderer {
         }
     }
 
+    /// Draws a given model onto the screen using the specified transformation.
+    ///
+    /// In most cases, you won't need to override this behavior. However, this may be necessary under certain
+    /// circumstances, such as to measure performance.
+    ///
+    /// - Parameter model: The model to render on the screen.
+    /// - Parameter transform: The transformation to apply to the model before rendering it.
+    open func drawModel(_ model: Model3D, transformedBy transform: Transform3D) {
+        for face in model {
+            let worldFace = face.transformedBy(transform)
+            let projectedFace = projection.project(worldFace)
+
+            if allowsBackfaceCulling, projectedFace.signedArea >= 0 {
+                continue
+            }
+            let brightness = getBrightness(of: worldFace)
+            let color = RGColor.dithered(by: brightness)
+            RGFillTriangle(projectedFace, color: color)
+        }
+    }
+
+    /// Gets the total brightness factor of a face based on the current scene's lighting.
+    public func getBrightness(of face: TriFace3D) -> Float {
+        var brightness: Float = 0
+
+        for light in scene.lights {
+            let lightOffset = (light - face.centroid).normalized()
+            brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
+        }
+
+        return brightness
+    }
+
     /// Removes the child from the current scene.
     /// - Parameter sceneObject: The child to remove from the scene.
     public func removeChild(_ sceneObject: SceneObject) {
@@ -151,30 +184,6 @@ open class SceneRenderer {
                 RFReportError("Failed to load model named '\(model.name)'.")
             }
         }
-    }
-
-    private func drawModel(_ model: Model3D, transformedBy transform: Transform3D) {
-        for face in model {
-            let worldFace = face.transformedBy(transform)
-            let projectedFace = projection.project(worldFace)
-
-            if allowsBackfaceCulling, projectedFace.signedArea >= 0 {
-                continue
-            }
-            let brightness = getBrightness(of: worldFace)
-            RGFillTriangle(projectedFace, color: .dithered(by: brightness))
-        }
-    }
-
-    private func getBrightness(of face: TriFace3D) -> Float {
-        var brightness: Float = 0
-
-        for light in scene.lights {
-            let lightOffset = (light - face.centroid).normalized()
-            brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
-        }
-
-        return brightness
     }
 
     private func sortFaces(of model: inout Model3D) {
