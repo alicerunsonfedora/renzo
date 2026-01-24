@@ -41,22 +41,15 @@ extension RGTriangle {
 func RGSortTriangle(_ tri: RGTriangle) -> RGTriangle {
     var sortedTri = RGTriangle(a: tri.pointA, b: tri.pointB, c: tri.pointC)
     if sortedTri.pointB.y < sortedTri.pointA.y {
-        let originalA = sortedTri.pointA
-        sortedTri.pointA = sortedTri.pointB
-        sortedTri.pointB = originalA
+        (sortedTri.pointA, sortedTri.pointB) = (sortedTri.pointB, sortedTri.pointA)
     }
-
     if sortedTri.pointC.y < sortedTri.pointB.y {
-        let originalC = sortedTri.pointC
-        sortedTri.pointC = sortedTri.pointB
-        sortedTri.pointB = originalC
-
-        if sortedTri.pointB.y < sortedTri.pointA.y {
-            let originalA = sortedTri.pointA
-            sortedTri.pointA = sortedTri.pointB
-            sortedTri.pointB = originalA
-        }
+        (sortedTri.pointB, sortedTri.pointC) = (sortedTri.pointC, sortedTri.pointB)
     }
+    if sortedTri.pointB.y < sortedTri.pointA.y {
+        (sortedTri.pointA, sortedTri.pointB) = (sortedTri.pointB, sortedTri.pointA)
+    }
+
     return sortedTri
 }
 
@@ -68,13 +61,29 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
         RFReportError("Failed to get frame buffer.")
         return
     }
-    let sortedTri = RGSortTriangle(tri)
+    var sortedTri = RGSortTriangle(tri)
+    sortedTri.pointA.x = floorf(sortedTri.pointA.x)
+    sortedTri.pointB.x = floorf(sortedTri.pointB.x)
+    sortedTri.pointC.x = floorf(sortedTri.pointC.x)
+
+    sortedTri.pointA.y = floorf(sortedTri.pointA.y)
+    sortedTri.pointB.y = floorf(sortedTri.pointB.y)
+    sortedTri.pointC.y = floorf(sortedTri.pointC.y)
+
+    if sortedTri.pointA.y == sortedTri.pointC.y { return }
+    if sortedTri.pointA.x == sortedTri.pointB.x, sortedTri.pointB.x == sortedTri.pointC.x { return }
+    if Int(sortedTri.pointA.y) >= Display.height || sortedTri.pointC.y < 0 { return }
+    if sortedTri.pointA.x < 0, sortedTri.pointB.x < 0, sortedTri.pointC.x < 0 { return }
+
+    let width = Float(Display.width)
+    if sortedTri.pointA.x >= width, sortedTri.pointB.x >= width, sortedTri.pointC.x >= width { return }
+
     if sortedTri.pointB.y == sortedTri.pointC.y {
-        RGFillBottomTriangle(sortedTri, color: color, into: &frameBuffer)
+        RGFillBottomFlatTriangle(sortedTri, color: color, into: &frameBuffer)
         return
     }
     if sortedTri.pointA.y == sortedTri.pointB.y {
-        RGFillTopTriangle(sortedTri, color: color, into: &frameBuffer)
+        RGFillTopFlatTriangle(sortedTri, color: color, into: &frameBuffer)
         return
     }
 
@@ -85,33 +94,37 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
     let top = RGTriangle(a: sortedTri.pointB, b: cutter, c: sortedTri.pointC)
     let bottom = RGTriangle(a: sortedTri.pointA, b: sortedTri.pointB, c: cutter)
 
-    RGFillTopTriangle(top, color: color, into: &frameBuffer)
-    RGFillBottomTriangle(bottom, color: color, into: &frameBuffer)
+    RGFillTopFlatTriangle(top, color: color, into: &frameBuffer)
+    RGFillBottomFlatTriangle(bottom, color: color, into: &frameBuffer)
 }
 
 /// Fills a triangle with a flat bottom a given color.
 /// - Parameter tri: The triangle that will be filled on the screen.
 /// - Parameter color: The color to fill the triangle with.
 /// - Parameter frameBuffer: The frame buffer the triangle will be filled into.
-func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
+func RGFillBottomFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     let top = tri.pointA
-    var (left, right) = (tri.pointB, tri.pointC)
+    var left = tri.pointB
+    var right = tri.pointC
+
     if left.x > right.x {
-        let originalRight = right
-        right = left
-        left = originalRight
+        (left.x, right.x) = (right.x, left.x)
     }
 
     let (minX, maxX) = (left.x, right.x)
     let invertSlopeA = (left.x - top.x) / (left.y - top.y)
     let invertSlopeB = (right.x - top.x) / (right.y - top.y)
 
-    var (currentX_1, currentX_2) = (top.x, top.x)
+    var currentX_1 = top.x
+    var currentX_2 = top.x
+
     for scanlineY in Int(top.y)...Int(left.y) {
-        if !(minX...maxX).contains(Float(scanlineY)) {
-            RGReportScanlineBoundEscape(scanlineY: scanlineY, minX: minX, maxX: maxX, tri: tri)
+        if currentX_1 > currentX_2 {
+            (currentX_1, currentX_2) = (currentX_2, currentX_1)
         }
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: currentX_2 - currentX_1, height: 1)
+        let width = currentX_2 - currentX_1
+        
+        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
         RGFillRect(rect, color: color, into: &frameBuffer)
         currentX_1 += invertSlopeA
         currentX_2 += invertSlopeB
@@ -122,42 +135,54 @@ func RGFillBottomTriangle(_ tri: RGTriangle, color: RGColor = .black, into frame
 /// - Parameter tri: The triangle that will be filled on the screen.
 /// - Parameter color: The color to fill the triangle with.
 /// - Parameter frameBuffer: The frame buffer the triangle will be filled into.
-func RGFillTopTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
+func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     let bottom = tri.pointC
-    var (left, right) = (tri.pointA, tri.pointB)
+    var left = tri.pointA
+    var right = tri.pointB
 
     if left.x > right.x {
-        let originalRight = right
-        right = left
-        left = originalRight
+        (left.x, right.x) = (right.x, left.x)
     }
 
     let (minX, maxX) = (left.x, right.x)
     let invertSlopeA = (bottom.x - left.x) / (bottom.y - left.y)
     let invertSlopeB = (bottom.x - right.x) / (bottom.y - right.y)
 
-    var (currentX_1, currentX_2) = (bottom.x, bottom.x)
+    var currentX_1 = bottom.x
+    var currentX_2 = bottom.x
+
     for scanlineY in stride(from: Int(bottom.y), to: Int(left.y) - 1, by: -1) {
-        if !(minX...maxX).contains(Float(scanlineY)) {
-            RGReportScanlineBoundEscape(scanlineY: scanlineY, minX: minX, maxX: maxX, tri: tri)
+        if currentX_1 > currentX_2 {
+            (currentX_1, currentX_2) = (currentX_2, currentX_1)
         }
-        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: currentX_2 - currentX_1, height: 1)
+        let width = currentX_2 - currentX_1
+
+        let rect = Rect(origin: Point(x: currentX_1, y: Float(scanlineY)), width: width, height: 1)
         RGFillRect(rect, color: color, into: &frameBuffer)
         currentX_1 -= invertSlopeA
         currentX_2 -= invertSlopeB
     }
 }
 
-private func RGReportScanlineBoundEscape(scanlineY: Int, minX: Float, maxX: Float, tri: RGTriangle) {
-    let formattedTri = RGFormatTriangle(tri)
+private func RGValidateScanline(
+    x1: Float,
+    x2: Float,
+    in range: ClosedRange<Float>,
+    sourceTri: RGTriangle,
+    mode: String
+) {
+    if range.contains(x1...x2) {
+        return
+    }
+    let formattedTri = RGFormatTriangle(sourceTri)
     RFReportWarning(
         """
-        The scanline is exceeding the bounds of the triangle's width.
-        Check that the triangle provided fits the bounds you expected.
-            Tri: \(formattedTri)
-            Y Scanline: \(scanlineY)
-            Min X: \(minX, precision: 0)
-            Max X: \(maxX, precision: 0)
+        The range for the scanline doesn't fit within the expected triangle X ranges.
+        This might cause unexpected scanline rendering.
+            Render Mode: \(mode)
+            Expected Range: \(range.lowerBound, precision: 0)...\(range.upperBound, precision: 0)
+            Scanline Range: \(x1, precision: 0)...\(x2, precision: 0)
+            Drawn Triangle: \(formattedTri)
         """
     )
 }
@@ -166,5 +191,5 @@ private func RGFormatTriangle(_ tri: RGTriangle) -> String {
     let pointA = "(\(tri.pointA.x, precision: 0), \(tri.pointA.y, precision: 0))"
     let pointB = "(\(tri.pointB.x, precision: 0), \(tri.pointB.y, precision: 0))"
     let pointC = "(\(tri.pointC.x, precision: 0), \(tri.pointC.y, precision: 0))"
-    return "\(pointA), \(pointB), \(pointC)"
+    return "V1: \(pointA), V2: \(pointB), V3: \(pointC)"
 }
