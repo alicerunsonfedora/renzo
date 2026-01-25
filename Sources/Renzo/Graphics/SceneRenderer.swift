@@ -96,7 +96,8 @@ open class SceneRenderer {
     ///
     /// - Parameter model: The model to render on the screen.
     /// - Parameter transform: The transformation to apply to the model before rendering it.
-    open func drawModel(_ model: Model3D, transformedBy transform: Transform3D) {
+    /// - parameter frameBuffer: The frame buffer to draw the model's faces into.
+    open func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout RGBuffer) {
         for face in model {
             let worldFace = face.transformedBy(transform)
             let projectedFace = projection.project(worldFace)
@@ -106,7 +107,7 @@ open class SceneRenderer {
             }
             let brightness = getBrightness(of: worldFace)
             let color = RGColor.dithered(by: brightness)
-            RGFillTriangle(projectedFace, color: color)
+            RGFillTriangle(projectedFace, color: color, into: &frameBuffer)
         }
     }
 
@@ -130,6 +131,11 @@ open class SceneRenderer {
 
     /// Renders the scene as a 2D image.
     public func render() {
+        guard var frameBuffer = Graphics.getFrame() else {
+            RFReportError("Failed to get the frame buffer.")
+            return
+        }
+
         if needsObjectSorting {
             sortObjects()
         }
@@ -138,7 +144,7 @@ open class SceneRenderer {
             if needsFaceSorting {
                 sortFaces(of: &object.model)
             }
-            drawModel(object.model, transformedBy: object.transformation)
+            drawModel(object.model, transformedBy: object.transformation, into: &frameBuffer)
         }
         needsFaceSorting = false
     }

@@ -107,20 +107,18 @@ public class Measurement {
     }
 
     private func reportCheckpoints(averageTime: Bool) {
-        var readableOutput: Float
+        var readableOutput = accumulatedTime
+        if averageTime {
+            readableOutput /= Float(checkpoints)
+        }
         var suffix: String
 
         switch precision {
         case .seconds:
-            readableOutput = accumulatedTime
             suffix = "s"
         case .milliseconds:
-            readableOutput = accumulatedTime * 1000
+            readableOutput *= 1000
             suffix = "ms"
-        }
-
-        if averageTime {
-            readableOutput /= Float(checkpoints)
         }
 
         switch outputFormat {

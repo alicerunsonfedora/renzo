@@ -86,6 +86,14 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
         RFReportError("Failed to get frame buffer.")
         return
     }
+    RGFillTriangle(tri, color: color, into: &frameBuffer)
+}
+
+/// Fills a triangle with a given color.
+/// - Parameter tri: The triangle defining the region of the screen to fill with a color.
+/// - Parameter color: The color to fill the region with.
+/// - Parameter frameBuffer: The frame buffer to draw the triangle into.
+public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     var sortedTri = RGSortTriangle(tri)
     RGFloorTriangle(&sortedTri)
 
