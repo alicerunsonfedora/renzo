@@ -70,10 +70,10 @@ func RGFloorTriangle(_ tri: inout RGTriangle) {
 func RGTriangleIsDrawable(_ tri: RGTriangle) -> Bool {
     if tri.pointA.y == tri.pointC.y { return false }
     if tri.pointA.x == tri.pointB.x, tri.pointB.x == tri.pointC.x { return false }
-    if Int(tri.pointA.y) >= Display.height || tri.pointC.y < 0 { return false }
+    if Int(tri.pointA.y) >= RGDisplayHeight || tri.pointC.y < 0 { return false }
     if tri.pointA.x < 0, tri.pointB.x < 0, tri.pointC.x < 0 { return false }
 
-    let width = Float(Display.width)
+    let width = Float(RGDisplayWidth)
     if tri.pointA.x >= width, tri.pointB.x >= width, tri.pointC.x >= width { return false }
     return true
 }
@@ -139,12 +139,9 @@ func RGFillBottomFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into f
     var currentX_2 = top.x
 
     for scanlineY in Int(top.y)...Int(left.y) {
-        guard (0..<Display.height).contains(scanlineY) else {
-            currentX_1 += invertSlopeA
-            currentX_2 += invertSlopeB
-            continue
+        if (0..<RGDisplayHeight).contains(scanlineY) {
+            RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         }
-        RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 += invertSlopeA
         currentX_2 += invertSlopeB
     }
@@ -170,13 +167,9 @@ func RGFillTopFlatTriangle(_ tri: RGTriangle, color: RGColor = .black, into fram
     var currentX_2 = bottom.x
 
     for scanlineY in stride(from: Int(bottom.y), to: Int(left.y) - 1, by: -1) {
-        guard (0..<Display.height).contains(scanlineY) else {
-            currentX_1 -= invertSlopeA
-            currentX_2 -= invertSlopeB
-            continue
+        if (0..<RGDisplayHeight).contains(scanlineY) {
+            RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         }
-
-        RGDrawTriScanline(x1: currentX_1, x2: currentX_2, scanlineY: scanlineY, color: color, into: &frameBuffer)
         currentX_1 -= invertSlopeA
         currentX_2 -= invertSlopeB
     }
@@ -187,7 +180,7 @@ func RGDrawTriScanline(x1: Float, x2: Float, scanlineY: Int, color: RGColor, int
     if currentX_1 > currentX_2 {
         (currentX_1, currentX_2) = (currentX_2, currentX_1)
     }
-    if currentX_2 < 0 || Int(currentX_1) >= Display.width {
+    if currentX_2 < 0 || Int(currentX_1) >= RGDisplayWidth {
         return
     }
     RGDrawScanline(Int(currentX_1), Int(currentX_2), y: scanlineY, color: color, into: &frameBuffer)

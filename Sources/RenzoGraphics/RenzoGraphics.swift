@@ -46,19 +46,6 @@ public enum RGPatternApplyMode {
 /// - Parameter x1: The ending point of the scanline.
 /// - Parameter y: The Y level of the scanline.
 /// - Parameter color: The color of the scanline.
-public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black) {
-    guard var frameBuffer = Graphics.getFrame() else {
-        RFReportError("Failed to get the frame buffer.")
-        return
-    }
-    RGDrawScanline(x0, x1, y: y, color: color, into: &frameBuffer)
-}
-
-/// Draws a scanline across the specified X points and Y level.
-/// - Parameter x0: The starting point of the scanline.
-/// - Parameter x1: The ending point of the scanline.
-/// - Parameter y: The Y level of the scanline.
-/// - Parameter color: The color of the scanline.
 /// - Parameter frameBuffer: The frame buffer to draw the scanline into.
 public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
     if case .solid(.clear) = color {
@@ -78,7 +65,7 @@ public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black
     start = max(start, 0)
     end = min(end, RGDisplayWidth - 1)
 
-    let byteOffset = UInt8(byteLength) - 1
+    let byteOffset: UInt8 = 7
     let stripsPerRow = rowStride / stripWidth
     let (startStrip, endStrip) = (start >> 3, end >> 3)
     let row = y * stripsPerRow
@@ -108,10 +95,10 @@ public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black
         var strip = frameBuffer[x + row]
         let stripX = x * 8
         let stripStart = max(start - stripX, 0)
-        let stripEnd = min(end - stripX, Int(byteOffset))
+        let stripEnd = UInt8(min(end - stripX, 7))
 
         let startMask: UInt8 = 255 >> stripStart
-        let endMask: UInt8 = 255 << (byteOffset - UInt8(stripEnd))
+        let endMask: UInt8 = 255 << (byteOffset - stripEnd)
         var bitmask = startMask & endMask
         if let patternBitmask {
             bitmask &= patternBitmask
