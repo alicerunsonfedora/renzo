@@ -22,6 +22,7 @@ import PlaydateKit
 /// ```swift
 /// var someWorkTime = Measurement("Performing some work", in: .milliseconds)
 /// for _ in 1...99 {
+///    someWorkTime.reset()
 ///    doSomeHeavyWork()
 ///    someWorkTime.checkpoint()
 /// }
@@ -46,7 +47,7 @@ public class Measurement {
     public internal(set) var checkpoints: Int = 0
 
     /// The current accumulated time for all checkpointed runs.
-    public internal(set) var accumulatedTime: Float = Float.nan
+    public internal(set) var accumulatedTime: Float = 0
 
     /// Create a measurement tracker for a specified work item.
     /// - Parameter comment: A comment describing the work being measured.
@@ -89,15 +90,10 @@ public class Measurement {
         reportToConsole(time: readableOutput, suffix: suffix)
     }
 
-    /// Create a checkpoint and reset the timer.
+    /// Create a checkpoint at the current point in time.
     public func checkpoint() {
-        let elapsedTime = abs(System.elapsedTime - timeStarted)
-        if accumulatedTime.isNaN {
-            accumulatedTime = elapsedTime
-        } else {
-            accumulatedTime += elapsedTime
-        }
-        timeStarted = System.elapsedTime
+        let elapsedTime = System.elapsedTime - timeStarted
+        accumulatedTime += elapsedTime
         checkpoints += 1
     }
 
