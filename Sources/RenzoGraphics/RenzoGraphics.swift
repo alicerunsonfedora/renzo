@@ -11,16 +11,15 @@ import RenzoFoundation
 let byteLength = 8
 let rowStride = 52
 let stripWidth = 1
+
 let RGDisplayWidth = Display.width
 let RGDisplayHeight = Display.height
 
+let RGDisplayWidthF = Float(Display.width)
+let RGDisplayHeightF = Float(Display.height)
+
 /// A typealias representing a color.
 public typealias RGColor = Graphics.Color
-
-enum RGRawColor: UInt8 {
-    case white = 0
-    case black = 255
-}
 
 /// A typealias representing a frame buffer.
 ///
@@ -32,14 +31,11 @@ enum RGRawColor: UInt8 {
 /// byte of the row.
 public typealias RGBuffer = UnsafeMutablePointer<UInt8>
 
-/// An enumeration of the pattern application modes.
-public enum RGPatternApplyMode {
-    /// The pattern should be copied to the current bytes, overwriting anything pre-existing.
-    case copy
-
-    /// The pattern should be XOR'ed with the current bytes.
-    case xor
-}
+#if AllowXOR
+    enum RGPatternApplyMode {
+        case copy, xor
+    }
+#endif
 
 /// Draws a scanline across the specified X points and Y level.
 /// - Parameter x0: The starting point of the scanline.
@@ -72,17 +68,23 @@ public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black
 
     let patternRowIndex = y % 8
     var pattern: UInt8 = 0
-    var patternBitmask: UInt8?
-    var patternMode: RGPatternApplyMode = .copy
+    var patternBitmask: UInt8 = 255
+    #if AllowXOR
+        var patternMode: RGPatternApplyMode = .copy
+    #endif
 
     switch color {
-    case .solid(.black):
-        break
     case .solid(.white), .solid(.clear):
         pattern = 255
-    case .solid(.xor):
-        pattern = 255
-        patternMode = .xor
+    #if AllowXOR
+        case .solid(.black):
+            break
+        case .solid(.xor):
+            patternMode = .xor
+    #else
+        case .solid(.black), .solid(.xor):
+            break
+    #endif
     case .pattern(let bitmap, let mask):
         pattern = RGGetBitPatternRow(bitmap, row: patternRowIndex)
         patternBitmask = RGGetBitPatternRow(mask, row: patternRowIndex)
@@ -100,18 +102,21 @@ public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black
         let startMask: UInt8 = 255 >> stripStart
         let endMask: UInt8 = 255 << (byteOffset - stripEnd)
         var bitmask = startMask & endMask
-        if let patternBitmask {
-            bitmask &= patternBitmask
-        }
+        bitmask &= patternBitmask
 
         let trimmedPattern = bitmask & pattern
-        switch patternMode {
-        case .copy:
+        #if AllowXOR
+            switch patternMode {
+            case .copy:
+                strip &= ~bitmask
+                strip = strip | trimmedPattern
+            case .xor:
+                strip = strip ^ trimmedPattern
+            }
+        #else
             strip &= ~bitmask
             strip = strip | trimmedPattern
-        case .xor:
-            strip = strip ^ trimmedPattern
-        }
+        #endif
         frameBuffer[x + row] = strip
     }
 }

@@ -26,6 +26,10 @@ let package = Package(
             targets: ["Renzo", "RenzoFoundation", "RenzoGraphics"]
         )
     ],
+    traits: [
+        .default(enabledTraits: ["AllowXOR"]),
+        .trait(name: "AllowXOR"),
+    ],
     dependencies: [
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main")
     ],

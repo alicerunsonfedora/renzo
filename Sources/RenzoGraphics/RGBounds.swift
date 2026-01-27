@@ -34,15 +34,15 @@ public func RGClipRectToBounds(_ rect: Rect) -> RGBounds {
     if rectMinX > rectMaxX {
         (rectMinX, rectMaxX) = (rectMaxX, rectMinX)
     }
-    if rectMaxX >= Display.width {
-        rectMaxX = Display.width - 1
+    if rectMaxX >= RGDisplayWidth {
+        rectMaxX = RGDisplayWidth - 1
     }
 
     if rectMinY > rectMaxY {
         (rectMinY, rectMaxY) = (rectMaxY, rectMinY)
     }
-    if rectMaxY >= Display.height {
-        rectMaxY = Display.height - 1
+    if rectMaxY >= RGDisplayHeight {
+        rectMaxY = RGDisplayHeight - 1
     }
 
     return RGBounds(minX: rectMinX, minY: rectMinY, maxX: rectMaxX, maxY: rectMaxY)

@@ -70,11 +70,12 @@ func RGFloorTriangle(_ tri: inout RGTriangle) {
 func RGTriangleIsDrawable(_ tri: RGTriangle) -> Bool {
     if tri.pointA.y == tri.pointC.y { return false }
     if tri.pointA.x == tri.pointB.x, tri.pointB.x == tri.pointC.x { return false }
-    if Int(tri.pointA.y) >= RGDisplayHeight || tri.pointC.y < 0 { return false }
+    if tri.pointA.y >= RGDisplayHeightF || tri.pointC.y < 0 { return false }
     if tri.pointA.x < 0, tri.pointB.x < 0, tri.pointC.x < 0 { return false }
 
-    let width = Float(RGDisplayWidth)
-    if tri.pointA.x >= width, tri.pointB.x >= width, tri.pointC.x >= width { return false }
+    if tri.pointA.x >= RGDisplayWidthF, tri.pointB.x >= RGDisplayWidthF, tri.pointC.x >= RGDisplayWidthF {
+        return false
+    }
     return true
 }
 
@@ -94,6 +95,9 @@ public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black) {
 /// - Parameter color: The color to fill the region with.
 /// - Parameter frameBuffer: The frame buffer to draw the triangle into.
 public func RGFillTriangle(_ tri: RGTriangle, color: RGColor = .black, into frameBuffer: inout RGBuffer) {
+    if case .solid(.clear) = color {
+        return
+    }
     var sortedTri = RGSortTriangle(tri)
     RGFloorTriangle(&sortedTri)
 
