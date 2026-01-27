@@ -23,10 +23,10 @@ final class BenchmarkingRenderer: SceneRenderer {
         super.init(scene: scene, frame: frame)
     }
 
-    override func drawModel(_ model: Model3D, transformedBy transform: Transform3D) {
+    override func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout RGBuffer) {
         let measurement = model.count == suzieCount ? suzieMeasure : tableMeasure
         measurement.reset()
-        super.drawModel(model, transformedBy: transform)
+        super.drawModel(model, transformedBy: transform, into: &frameBuffer)
         measurement.checkpoint()
     }
 }
@@ -37,8 +37,8 @@ class BenchmarkingScene {
     var currentBenchmarkFrame: Int = 0
     var currentSceneObject: SceneObject
 
-    let suzieMeasure = Measurement("Draw Suzie Faces", in: .milliseconds)
-    let tableMeasure = Measurement("Draw Table Faces", in: .milliseconds)
+    let suzieMeasure = Measurement("Draw Suzie", in: .milliseconds)
+    let tableMeasure = Measurement("Draw Table", in: .milliseconds)
 
     init() {
         do {
