@@ -66,8 +66,8 @@ class BenchmarkingScene {
         do {
             background = try Graphics.Bitmap(path: "Resources/Background")
         } catch {
-           failedToLoad = true
-           background = nil 
+            failedToLoad = true
+            background = nil
         }
     }
 
