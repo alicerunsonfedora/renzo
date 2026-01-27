@@ -61,7 +61,7 @@ class BenchmarkingScene {
             let sceneObject = SceneObject(model: Model3D(faces: []), worldPosition: .zero, worldRotation: .zero)
             self.currentSceneObject = sceneObject
             sceneRenderer = nil
-            
+
         }
         do {
             background = try Graphics.Bitmap(path: "Resources/Background")
