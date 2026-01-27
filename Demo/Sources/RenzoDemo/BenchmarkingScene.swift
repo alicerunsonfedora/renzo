@@ -40,6 +40,8 @@ class BenchmarkingScene {
     let suzieMeasure = Measurement("Draw Suzie", in: .milliseconds)
     let tableMeasure = Measurement("Draw Table", in: .milliseconds)
 
+    let background: Graphics.Bitmap?
+
     init() {
         do {
             let scene = try Scene3D(named: "Benchmark")
@@ -59,6 +61,12 @@ class BenchmarkingScene {
             let sceneObject = SceneObject(model: Model3D(faces: []), worldPosition: .zero, worldRotation: .zero)
             self.currentSceneObject = sceneObject
             sceneRenderer = nil
+            
+        }
+        do {
+            background = try Graphics.Bitmap(path: "Resources/Background")
+        } catch {
+            background = nil
         }
     }
 
@@ -70,18 +78,13 @@ class BenchmarkingScene {
 
         if currentBenchmarkFrame >= BENCHMARK_END_FRAME { return }
         processBenchmark()
-
-        do {
-            let image = try Graphics.Bitmap(path: "Resources/Background")
-            Graphics.drawBitmap(image, at: .zero)
-        } catch {
-            RFReportError("Failed to load background image.")
-        }
-        guard let sceneRenderer else {
-            return
+        guard let sceneRenderer else { return }
+        if let background {
+            Graphics.drawBitmap(background, at: .zero)
         }
         sceneRenderer.render()
         System.drawFPS()
+
         currentBenchmarkFrame += 1
         if currentBenchmarkFrame == BENCHMARK_END_FRAME {
             print("=== BENCHMARK ENDED ===")
