@@ -25,7 +25,7 @@ extension Scene3D {
         var modelRefs = [ModelReference]()
         var lights = [Point3D]()
 
-        guard let stat = try? File.stat(path: path), stat.size > 0 else {
+        guard File.fileExists(at: path) else {
             throw .readerEmptyOrUnknownFile
         }
 
@@ -33,7 +33,7 @@ extension Scene3D {
             throw .readerEmptyOrUnknownFile
         }
 
-        let magicHeader = String(reading: &file, bytes: 7)
+        let magicHeader = String(reading: file, ofLength: 7)
         guard magicHeader == "PDSCENE" else {
             throw .readerHeaderMismatch
         }
@@ -45,10 +45,10 @@ extension Scene3D {
         }
 
         if FileReadingUtils.expectText("lights", bytes: 6, in: &file) {
-            let lightsCount = UInt32(reading: &file)
+            let lightsCount = UInt32(reading: file)
             if lightsCount > 0 {
                 for _ in 1...lightsCount {
-                    let source = Point3D(reading: &file)
+                    let source = Point3D(reading: file)
                     lights.append(source)
                 }
                 guard lights.count == lightsCount else { throw .readerCorruptFile }
@@ -69,18 +69,18 @@ extension Scene3D {
     private static func loadReferences(
         from file: inout File.FileHandle
     ) throws(Model3DDecoderError) -> [ModelReference] {
-        let refModelsCount = UInt32(reading: &file)
+        let refModelsCount = UInt32(reading: file)
         if refModelsCount <= 0 { return [] }
 
         var modelRefs = [ModelReference]()
         for _ in 1...refModelsCount {
-            let strlen = UInt32(reading: &file)
+            let strlen = UInt32(reading: file)
             guard strlen > 0 else { throw .readerCorruptFile }
 
-            let name = String(reading: &file, bytes: Int(strlen))
-            let position = Point3D(reading: &file)
-            let rotation = Point3D(reading: &file)
-            let scale = Point3D(reading: &file)
+            let name = String(reading: file, ofLength: Int(strlen))
+            let position = Point3D(reading: file)
+            let rotation = Point3D(reading: file)
+            let scale = Point3D(reading: file)
 
             let refModel = ModelReference(
                 name: name, position: position, rotation: rotation, scale: scale)
@@ -95,17 +95,14 @@ extension Scene3D {
             throw .readerCorruptFile
         }
 
-        let cameraCount = UInt32(reading: &file)
+        let cameraCount = UInt32(reading: file)
         guard cameraCount > 0 else {
             throw .readerCorruptFile
         }
         var cameras = [Camera3D]()
 
         for _ in 1...cameraCount {
-            var camera = Camera3D(position: .zero, rotation: .zero, fieldOfView: 0)
-            withUnsafeMutablePointer(to: &camera) { ptr in
-                _ = try? file.read(buffer: ptr, length: UInt32(MemoryLayout<Camera3D>.size))
-            }
+            let camera = Camera3D(reading: file)
             cameras.append(camera)
         }
         guard cameras.count == cameraCount else { throw .readerCorruptFile }

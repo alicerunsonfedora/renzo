@@ -9,6 +9,10 @@ import PlaydateKit
 
 extension Graphics {
     /// Draws a filled triangle at the points provided by the face.
+    ///
+    /// > Note: If you need more performance, consider using `RGFillTriangle` from the RenzoGraphics library instead of
+    /// > this extension method.
+    ///
     /// - Parameter triangle: The triangle to draw on the screen.
     /// - Parameter color: The fill color of the triangle.
     public static func fillTriangle(_ triangle: TriFace2D, color: Color = .black) {

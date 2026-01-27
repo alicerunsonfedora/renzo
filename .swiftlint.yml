@@ -41,5 +41,8 @@ identifier_name:
     - up
     - id
     - URL
+    - x0
+    - x1
+    - x2
 
 reporter: "xcode"

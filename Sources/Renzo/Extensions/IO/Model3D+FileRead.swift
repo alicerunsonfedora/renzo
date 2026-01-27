@@ -22,7 +22,7 @@ extension Model3D {
     public init(reading path: String) throws(Model3DDecoderError) {
         var faces = [TriFace3D]()
 
-        guard let stat = try? File.stat(path: path), stat.size > 0 else {
+        guard File.fileExists(at: path) else {
             throw .readerEmptyOrUnknownFile
         }
 
@@ -30,13 +30,13 @@ extension Model3D {
             throw .readerEmptyOrUnknownFile
         }
 
-        let magicHeader = String(reading: &file, bytes: 5)
+        let magicHeader = String(reading: file, ofLength: 5)
         guard magicHeader == "MDL3D" else {
             throw .readerHeaderMismatch
         }
 
         while FileReadingUtils.expectHeader("f", in: &file) {
-            let face = Self.makeFace(reading: &file)
+            let face = TriFace3D(reading: file)
             faces.append(face)
         }
 
@@ -47,13 +47,5 @@ extension Model3D {
         }
 
         self.faces = faces
-    }
-
-    private static func makeFace(reading file: inout File.FileHandle) -> TriFace3D {
-        var face = TriFace3D(a: .zero, b: .zero, c: .zero)
-        _ = withUnsafeMutablePointer(to: &face) { ptr in
-            try? file.read(buffer: ptr, length: UInt32(MemoryLayout<TriFace3D>.size))
-        }
-        return face
     }
 }

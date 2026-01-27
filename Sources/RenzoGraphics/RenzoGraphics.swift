@@ -37,6 +37,8 @@ public typealias RGBuffer = UnsafeMutablePointer<UInt8>
     }
 #endif
 
+// swiftlint:disable cyclomatic_complexity function_body_length
+
 /// Draws a scanline across the specified X points and Y level.
 /// - Parameter x0: The starting point of the scanline.
 /// - Parameter x1: The ending point of the scanline.
@@ -120,3 +122,5 @@ public func RGDrawScanline(_ x0: Int, _ x1: Int, y: Int, color: RGColor = .black
         frameBuffer[x + row] = strip
     }
 }
+
+// swiftlint:enable cyclomatic_complexity function_body_length

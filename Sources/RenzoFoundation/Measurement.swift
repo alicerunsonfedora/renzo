@@ -31,6 +31,20 @@ import PlaydateKit
 public class Measurement {
     public enum DurationPrecision {
         case seconds, milliseconds
+
+        var suffix: String {
+            switch self {
+            case .seconds: "s"
+            case .milliseconds: "ms"
+            }
+        }
+
+        var multiplier: Float {
+            switch self {
+            case .seconds: 1
+            case .milliseconds: 1000
+            }
+        }
     }
 
     public enum OutputFormat {
@@ -75,18 +89,8 @@ public class Measurement {
         }
 
         let elapsedTime = abs(System.elapsedTime - absoluteTimeStarted)
-        var readableOutput: Float
-        var suffix: String
-
-        switch precision {
-        case .seconds:
-            readableOutput = elapsedTime
-            suffix = "s"
-        case .milliseconds:
-            readableOutput = elapsedTime * 1000
-            suffix = "ms"
-        }
-
+        let readableOutput = elapsedTime * precision.multiplier
+        let suffix = precision.suffix
         reportToConsole(time: readableOutput, suffix: suffix)
     }
 
@@ -107,15 +111,8 @@ public class Measurement {
         if averageTime {
             readableOutput /= Float(checkpoints)
         }
-        var suffix: String
-
-        switch precision {
-        case .seconds:
-            suffix = "s"
-        case .milliseconds:
-            readableOutput *= 1000
-            suffix = "ms"
-        }
+        readableOutput *= precision.multiplier
+        let suffix = precision.suffix
 
         switch outputFormat {
         case .prettyPrinted:
