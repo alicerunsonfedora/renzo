@@ -40,7 +40,7 @@ class BenchmarkingScene {
     let suzieMeasure = Measurement("Draw Suzie", in: .milliseconds)
     let tableMeasure = Measurement("Draw Table", in: .milliseconds)
 
-    let background: Graphics.Bitmap?
+    let background: Graphics.Bitmap!
 
     init() {
         do {
@@ -66,7 +66,8 @@ class BenchmarkingScene {
         do {
             background = try Graphics.Bitmap(path: "Resources/Background")
         } catch {
-            background = nil
+           failedToLoad = true
+           background = nil 
         }
     }
 
@@ -79,9 +80,7 @@ class BenchmarkingScene {
         if currentBenchmarkFrame >= BENCHMARK_END_FRAME { return }
         processBenchmark()
         guard let sceneRenderer else { return }
-        if let background {
-            Graphics.drawBitmap(background, at: .zero)
-        }
+        Graphics.drawBitmap(background, at: .zero)
         sceneRenderer.render()
         System.drawFPS()
 
