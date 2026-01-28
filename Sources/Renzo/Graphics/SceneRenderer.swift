@@ -101,10 +101,10 @@ open class SceneRenderer {
         for face in model {
             let worldFace = face.transformedBy(transform)
             let projectedFace = projection.project(worldFace)
-
             if allowsBackfaceCulling, projectedFace.signedArea >= 0 {
                 continue
             }
+
             let brightness = getBrightness(of: worldFace)
             let color = RGColor.dithered(by: brightness)
             RGFillTriangle(projectedFace, color: color, into: &frameBuffer)
@@ -114,12 +114,10 @@ open class SceneRenderer {
     /// Gets the total brightness factor of a face based on the current scene's lighting.
     public func getBrightness(of face: TriFace3D) -> Float {
         var brightness: Float = 0
-
         for light in scene.lights {
             let lightOffset = (light - face.centroid).normalized()
             brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
         }
-
         return brightness
     }
 
