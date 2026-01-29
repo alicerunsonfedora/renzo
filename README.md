@@ -1,5 +1,7 @@
 # Renzo
 
+<img src="./.readme/Renzo.png" alt="Renzo icon" align="right" />
+
 With **Renzo**, you can display and interact with 3D content in your
 Playdate app or game through PlaydateKit. Load three-dimensional scenes
 and models from files or generated structures, and render them with
