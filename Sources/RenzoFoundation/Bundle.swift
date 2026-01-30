@@ -33,13 +33,13 @@ public class Bundle {
         switch resourceType {
         case .model:
             let resPath = resourcesBase + "/Models/\(resource).model"
-            guard let stat = try? File.stat(path: resPath), stat.size > 0 else {
+            guard File.fileExists(at: resPath) else {
                 return nil
             }
             return resPath
         case .scene:
             let resPath = resourcesBase + "/Scenes/\(resource).pdscene"
-            guard let stat = try? File.stat(path: resPath), stat.size > 0 else {
+            guard File.fileExists(at: resPath) else {
                 return nil
             }
             return resPath
