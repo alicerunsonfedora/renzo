@@ -5,8 +5,8 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
+import PDFoundation
 import PlaydateKit
-import RenzoFoundation
 
 extension Model3D {
     /// Create a 3D model by reading a file from the game's resources.

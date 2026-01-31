@@ -5,15 +5,15 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
+import PDFoundation
 import PlaydateKit
-import RenzoFoundation
 
 enum FileReadingUtils {
-    static func expectHeader(_ header: String, in file: inout RFFile) -> Bool {
+    static func expectHeader(_ header: String, in file: inout PDFile) -> Bool {
         expectText(header, bytes: 1, in: &file)
     }
 
-    static func expectText(_ text: String, bytes: Int, in file: inout RFFile) -> Bool {
+    static func expectText(_ text: String, bytes: Int, in file: inout PDFile) -> Bool {
         guard let currentPos = try? file.currentSeekPosition() else { return false }
         let magicHeader = UnsafeMutableRawPointer.allocate(
             byteCount: bytes, alignment: MemoryLayout<CChar>.alignment)
@@ -37,21 +37,21 @@ enum FileReadingUtils {
 // MARK: - Convenience Reading
 
 extension Point3D {
-    init(reading file: RFFile) {
+    init(reading file: PDFile) {
         self = .zero
         file.read(as: Point3D.self, into: &self)
     }
 }
 
 extension TriFace3D {
-    init(reading file: RFFile) {
+    init(reading file: PDFile) {
         self = TriFace3D(a: .zero, b: .zero, c: .zero)
         file.read(as: TriFace3D.self, into: &self)
     }
 }
 
 extension Camera3D {
-    init(reading file: RFFile) {
+    init(reading file: PDFile) {
         self = Camera3D(position: .zero, rotation: .zero, fieldOfView: 0)
         file.read(as: Camera3D.self, into: &self)
     }
