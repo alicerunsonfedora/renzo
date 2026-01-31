@@ -5,6 +5,8 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
+import PDGraphics
+
 /// A protocol that defines a projection from three-dimensional space into two-dimensional space.
 public protocol Projection3D: AnyObject {
     /// Project a point from three-dimensional space into its two-dimensional space counterpart.

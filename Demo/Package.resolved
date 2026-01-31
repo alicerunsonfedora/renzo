@@ -7,7 +7,7 @@
       "location" : "https://source.marquiskurt.net/PDUniverse/PDKUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "538d98e42376497dbf2cc1c6fd69f0a94bf2df7f"
+        "revision" : "a66389c5aeb4629a5ee5b77846ba51defecaf624"
       }
     },
     {
@@ -17,15 +17,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "485b25329a2552222d15564ecb68a4eeb3d901b7"
-      }
-    },
-    {
-      "identity" : "utf8viewextensions",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/strawdynamics/UTF8ViewExtensions.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "babf8b80cff1dba41678ececccd3dc711bb9a975"
       }
     }
   ],

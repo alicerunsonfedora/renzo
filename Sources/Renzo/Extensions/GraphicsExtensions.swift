@@ -5,6 +5,7 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
+import PDGraphics
 import PlaydateKit
 
 let bayer: [[UInt8]] = [
