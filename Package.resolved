@@ -1,13 +1,22 @@
 {
-  "originHash" : "abf7b1236cf053d71caefb7af874d1b88330735d566752b539c4ea78ff20429f",
+  "originHash" : "518c54dca216453cbfff61df67c22901a88fe12e23bb04e96a7f14c175ed0c69",
   "pins" : [
+    {
+      "identity" : "pdkutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://source.marquiskurt.net/PDUniverse/PDKUtils.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e897b11ffbeac0b44329ed1e0c73326d89b37098"
+      }
+    },
     {
       "identity" : "playdatekit",
       "kind" : "remoteSourceControl",
       "location" : "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "05b68755a1acfa5498ed10a3f00c75576c890d72"
+        "revision" : "9f23ec625b51089b0744f5c0a9cfddd95937c8e7"
       }
     },
     {
@@ -17,6 +26,15 @@
       "state" : {
         "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
         "version" : "601.0.1"
+      }
+    },
+    {
+      "identity" : "utf8viewextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/strawdynamics/UTF8ViewExtensions.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "babf8b80cff1dba41678ececccd3dc711bb9a975"
       }
     }
   ],
