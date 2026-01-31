@@ -8,7 +8,6 @@
 import PlaydateKit
 import Renzo
 
-@PlaydateMain
 final class Game: PlaydateGame {
     #if Benchmarking
         let scene: BenchmarkingScene
