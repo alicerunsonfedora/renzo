@@ -21,7 +21,7 @@ let bayer: [[UInt8]] = [
 extension Graphics {
     /// Draws a filled triangle at the points provided by the face.
     ///
-    /// > Note: If you need more performance, consider using `RGFillTriangle` from the RenzoGraphics library instead of
+    /// > Note: If you need more performance, consider using `PGFillTriangle` from the PDGraphics library instead of
     /// > this extension method.
     ///
     /// - Parameter triangle: The triangle to draw on the screen.

@@ -25,8 +25,9 @@ let package = Package(
         .trait(name: "Benchmarking"),
     ],
     dependencies: [
-        .package(name: "Renzo", path: "../", traits: []),
+        .package(name: "Renzo", path: "../"),
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
+        .package(url: "https://source.marquiskurt.net/PDUniverse/PDKUtils.git", branch: "main"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -36,6 +37,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Renzo", package: "Renzo"),
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
+                .product(name: "PDGraphics", package: "PDKUtils"),
             ],
             exclude: ["Resources"],
             swiftSettings: [

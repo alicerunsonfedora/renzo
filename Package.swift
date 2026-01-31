@@ -20,49 +20,23 @@ let package = Package(
     name: "Renzo",
     platforms: [.macOS(.v14)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "Renzo",
-            targets: ["Renzo", "RenzoFoundation", "RenzoGraphics"]
-        )
-    ],
-    traits: [
-        .default(enabledTraits: ["AllowXOR"]),
-        .trait(name: "AllowXOR"),
+        .library(name: "Renzo", targets: ["Renzo"])
     ],
     dependencies: [
-        .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main")
+        .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
+        .package(url: "https://source.marquiskurt.net/PDUniverse/PDKUtils.git", branch: "main"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "RenzoFoundation",
-            dependencies: [.product(name: "PlaydateKit", package: "PlaydateKit")],
-            swiftSettings: [.enableExperimentalFeature("Embedded"), .unsafeFlags(swiftFlags)]
-        ),
-        .target(
-            name: "RenzoGraphics",
-            dependencies: [
-                .product(name: "PlaydateKit", package: "PlaydateKit"),
-                "RenzoFoundation",
-            ],
-            swiftSettings: [
-                .enableExperimentalFeature("Embedded"),
-                .unsafeFlags(swiftFlags),
-            ],
-        ),
         .target(
             name: "Renzo",
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
-                "RenzoGraphics",
-                "RenzoFoundation",
+                .product(name: "PDGraphics", package: "PDKUtils"),
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Embedded"),
                 .unsafeFlags(swiftFlags),
             ],
-        ),
+        )
     ]
 )

@@ -15,18 +15,6 @@ can use to render 3D content.
 > Renzo is a pre-release library and is not production ready. Use at your
 > own risk!
 
-## What's included?
-
-Renzo provides three libraries that can be leveraged:
-
-- `Renzo`, the main package, provides all the facilities for displaying
-  and interacting with 3D content.
-- `RenzoGraphics` provides facilities for more performant graphics
-  rendering. This includes drawing scanlines, triangles, and rectangles.
-- `RenzoFoundation` provides fundamental functions and systems used by
-  `Renzo` and `RenzoGraphics`, such as logging, measurements, and file
-  system loading.
-
 ## Getting started
 
 Start by adding `Renzo` to your package dependencies with the Swift
@@ -119,3 +107,4 @@ For more information on your rights, refer to LICENSE.txt.
 Renzo is made possible thanks to the following open source projects:
 
 - [PlaydateKit](https://github.com/finvoor/PlaydateKit) - MIT License
+- [PDKUtils](https://source.marquiskurt.net/PDUniverse/PDKUtils) - MIT License

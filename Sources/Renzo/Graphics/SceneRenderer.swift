@@ -5,9 +5,9 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
+import PDFoundation
+import PDGraphics
 import PlaydateKit
-import RenzoFoundation
-import RenzoGraphics
 
 /// A renderer capable of rendering three-dimensional scenes.
 ///
@@ -97,7 +97,7 @@ open class SceneRenderer {
     /// - Parameter model: The model to render on the screen.
     /// - Parameter transform: The transformation to apply to the model before rendering it.
     /// - parameter frameBuffer: The frame buffer to draw the model's faces into.
-    open func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout RGBuffer) {
+    open func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout PGBuffer) {
         for face in model {
             let worldFace = face.transformedBy(transform)
             let projectedFace = projection.project(worldFace)
@@ -106,8 +106,8 @@ open class SceneRenderer {
             }
 
             let brightness = getBrightness(of: worldFace)
-            let color = RGColor.dithered(by: brightness)
-            RGFillTriangle(projectedFace, color: color, into: &frameBuffer)
+            let color = PGColor.dithered(by: brightness)
+            PGFillTriangle(projectedFace, color: color, into: &frameBuffer)
         }
     }
 
@@ -130,7 +130,7 @@ open class SceneRenderer {
     /// Renders the scene as a 2D image.
     public func render() {
         guard var frameBuffer = Graphics.getFrame() else {
-            RFReportError("Failed to get the frame buffer.")
+            PDReportError("Failed to get the frame buffer.")
             return
         }
 
@@ -185,7 +185,7 @@ open class SceneRenderer {
                     worldScale: model.scale)
                 sceneObjects.append(child)
             } catch {
-                RFReportError("Failed to load model named '\(model.name)'.")
+                PDReportError("Failed to load model named '\(model.name)'.")
             }
         }
     }

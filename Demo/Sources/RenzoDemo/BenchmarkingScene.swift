@@ -5,10 +5,10 @@
 //  Created by Marquis Kurt on 24-01-2026.
 //
 
+import PDFoundation
+import PDGraphics
 import PlaydateKit
 import Renzo
-import RenzoFoundation
-import RenzoGraphics
 
 private let BENCHMARK_END_FRAME = 700
 
@@ -23,7 +23,7 @@ final class BenchmarkingRenderer: SceneRenderer {
         super.init(scene: scene, frame: frame)
     }
 
-    override func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout RGBuffer) {
+    override func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout PGBuffer) {
         let measurement = model.count == suzieCount ? suzieMeasure : tableMeasure
         measurement.reset()
         super.drawModel(model, transformedBy: transform, into: &frameBuffer)
@@ -56,7 +56,7 @@ class BenchmarkingScene {
 
             sceneRenderer = renderer
         } catch {
-            RFReportError("The benchmark couldn't be loaded.")
+            PDReportError("The benchmark couldn't be loaded.")
             failedToLoad = true
             let sceneObject = SceneObject(model: Model3D(faces: []), worldPosition: .zero, worldRotation: .zero)
             self.currentSceneObject = sceneObject
