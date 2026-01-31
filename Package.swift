@@ -24,7 +24,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
-        .package(url: "https://source.marquiskurt.net/PDUniverse/PDKUtils.git", branch: "main"),
+        .package(
+            url: "https://source.marquiskurt.net/PDUniverse/PDKUtils.git",
+            branch: "main",
+            traits: []
+        ),
     ],
     targets: [
         .target(
