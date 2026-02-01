@@ -52,6 +52,8 @@ open class SceneRenderer {
     /// The current scene objects in the world.
     public internal(set) var sceneObjects: [SceneObject]
 
+    let patterns = PGBayerPatternCache()
+
     /// Create a renderer for a scene with a given projection and frame.
     /// - Parameter scene: The scene the renderer will display.
     /// - Parameter projection: The projection that the renderer will use.
@@ -106,7 +108,7 @@ open class SceneRenderer {
             }
 
             let brightness = getBrightness(of: worldFace)
-            let color = PGColor.dithered(by: brightness)
+            let color = patterns[brightness]
             PGFillTriangle(projectedFace, color: color, into: &frameBuffer)
         }
     }
