@@ -16,10 +16,16 @@ public struct TriFace3D: Equatable {
     /// The third point of the face.
     public var pointC: Point3D
 
-    public init(a pointA: Point3D, b pointB: Point3D, c pointC: Point3D) {
+    /// The triangle's color.
+    ///
+    /// A color value of `0` is black, and a color value of `1` is white.
+    public var color: Float
+
+    public init(a pointA: Point3D, b pointB: Point3D, c pointC: Point3D, color: Float = 1) {
         self.pointA = pointA
         self.pointB = pointB
         self.pointC = pointC
+        self.color = color
     }
 }
 
@@ -39,11 +45,11 @@ extension TriFace3D: Transformable3D {
 
 extension TriFace3D {
     public var description: String {
-        "TriFace3D(a: \(pointA.description), b: \(pointB.description), c: \(pointC.description))"
+        "TriFace3D(a: \(pointA.description), b: \(pointB.description), c: \(pointC.description), color: \(color))"
     }
 
     public static func + (lhs: TriFace3D, rhs: Point3D) -> TriFace3D {
-        TriFace3D(a: lhs.pointA + rhs, b: lhs.pointB + rhs, c: lhs.pointC + rhs)
+        TriFace3D(a: lhs.pointA + rhs, b: lhs.pointB + rhs, c: lhs.pointC + rhs, color: lhs.color)
     }
 
     /// The centermost point in the triangle.

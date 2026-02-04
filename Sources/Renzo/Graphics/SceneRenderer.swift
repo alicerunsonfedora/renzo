@@ -113,13 +113,17 @@ open class SceneRenderer {
         }
     }
 
-    /// Gets the total brightness factor of a face based on the current scene's lighting.
+    /// Gets the total brightness factor of a face based on the current scene's lighting conditions.
+    ///
+    /// A face's brightness consists of tow major components: the face's color, and the lights in the scene.
     public func getBrightness(of face: TriFace3D) -> Float {
         var brightness: Float = 0
         for light in scene.lights {
             let lightOffset = (light - face.centroid).normalized()
             brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
         }
+
+        brightness *= face.color
         return brightness
     }
 
