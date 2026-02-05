@@ -17,9 +17,9 @@ public struct Scene3D: Equatable {
     public var models: [ModelReference]
 
     /// The point lights in the scene.
-    public var lights: [Point3D]
+    public var lights: [Light3D]
 
-    public init(cameras: [Camera3D], models: [ModelReference] = [], lights: [Point3D] = []) {
+    public init(cameras: [Camera3D], models: [ModelReference] = [], lights: [Light3D] = []) {
         self.cameras = cameras
         self.models = models
         self.lights = lights

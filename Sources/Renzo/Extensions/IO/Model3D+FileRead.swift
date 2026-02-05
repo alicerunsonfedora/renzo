@@ -30,8 +30,8 @@ extension Model3D {
             throw .readerEmptyOrUnknownFile
         }
 
-        let magicHeader = String(reading: file, ofLength: 5)
-        guard magicHeader == "MDL3D" else {
+        let magicHeader = String(reading: file, ofLength: 7)
+        guard magicHeader == "PDMDL3D" else {
             throw .readerHeaderMismatch
         }
 

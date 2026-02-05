@@ -23,7 +23,7 @@ extension Scene3D {
     public init(reading path: String) throws(Model3DDecoderError) {
         var cameras = [Camera3D]()
         var modelRefs = [ModelReference]()
-        var lights = [Point3D]()
+        var lights = [Light3D]()
 
         guard File.fileExists(at: path) else {
             throw .readerEmptyOrUnknownFile
@@ -48,8 +48,8 @@ extension Scene3D {
             let lightsCount = UInt32(reading: file)
             if lightsCount > 0 {
                 for _ in 1...lightsCount {
-                    let source = Point3D(reading: file)
-                    lights.append(source)
+                    let light = Light3D(reading: file)
+                    lights.append(light)
                 }
                 guard lights.count == lightsCount else { throw .readerCorruptFile }
             }

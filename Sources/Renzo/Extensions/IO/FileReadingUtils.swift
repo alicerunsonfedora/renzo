@@ -56,3 +56,10 @@ extension Camera3D {
         file.read(as: Camera3D.self, into: &self)
     }
 }
+
+extension Light3D {
+    init(reading file: PDFile) {
+        self = Light3D(position: .zero, power: 0, falloff: 0)
+        file.read(as: Light3D.self, into: &self)
+    }
+}
