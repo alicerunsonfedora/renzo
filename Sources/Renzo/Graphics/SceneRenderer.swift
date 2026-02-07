@@ -117,12 +117,14 @@ open class SceneRenderer {
     ///
     /// A face's brightness consists of tow major components: the face's color, and the lights in the scene.
     public func getBrightness(of face: TriFace3D) -> Float {
-        var brightness: Float = 0
+        var brightness: Float = scene.ambientLight
         for light in scene.lights {
-            let lightOffset = (light - face.centroid).normalized()
-            brightness += max(0, face.normal.normalized().dotProduct(with: lightOffset))
+            let lightness = calculateLightnessValue(from: light, onto: face)
+            if lightness < 0 {
+                continue
+            }
+            brightness += max(0, lightness)
         }
-
         brightness *= face.color
         return brightness
     }
@@ -179,6 +181,18 @@ open class SceneRenderer {
     }
 
     // MARK: - Internal Mechanisms
+
+    func calculateLightnessValue(from light: Light3D, onto face: TriFace3D) -> Float {
+        // Handle attenuation/light falloff.
+        let distanceFromFace = light.position - face.centroid
+        let attenuation = 1.0 - distanceFromFace.length / light.falloff
+        if attenuation <= 0 { return -1 }
+
+        let lightOffset = distanceFromFace.normalized()
+        let faceNormal = face.normal.normalized()
+        let rawLight = faceNormal.dotProduct(with: lightOffset)
+        return rawLight * light.power
+    }
 
     private func loadSceneObjectsFromScene() {
         for model in scene.models {

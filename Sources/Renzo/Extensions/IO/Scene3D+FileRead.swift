@@ -24,6 +24,7 @@ extension Scene3D {
         var cameras = [Camera3D]()
         var modelRefs = [ModelReference]()
         var lights = [Light3D]()
+        var ambientLight: Float = 0
 
         guard File.fileExists(at: path) else {
             throw .readerEmptyOrUnknownFile
@@ -38,6 +39,7 @@ extension Scene3D {
             throw .readerHeaderMismatch
         }
 
+        ambientLight = Float(reading: file)
         cameras = try Self.loadCameras(from: &file)
 
         if FileReadingUtils.expectText("refs", bytes: 4, in: &file) {
@@ -61,6 +63,7 @@ extension Scene3D {
             throw .readerCorruptFile
         }
 
+        self.ambientLight = ambientLight
         self.cameras = cameras
         self.models = modelRefs
         self.lights = lights

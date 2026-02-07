@@ -11,6 +11,9 @@ public struct Light3D: Equatable {
     public var position: Point3D
 
     /// The energy of the light.
+    ///
+    /// Light energy is represented as the intensity of the light relative to the brightest light in the scene and sits
+    /// in the 0-1 range.
     public var power: Float
 
     /// The falloff distance of the light.
