@@ -2,10 +2,14 @@
 //  Point3D.swift
 //  Renzo
 //
-//  Created by Marquis Kurt on 19-12-2025.
+//  Created by Marquis Kurt on 08-02-2026.
 //
 
-import PlaydateKit
+#if Playdate && hasFeature(Embedded) && canImport(PlaydateKit)
+    import PlaydateKit
+#else
+    import Foundation
+#endif
 
 infix operator **
 infix operator **=
@@ -223,11 +227,11 @@ extension Point3D: Transformable3D {
 // MARK: - Maths
 
 /// Returns the minimum between two three-dimensional points, component wise.
-func min(_ lhs: Point3D, _ rhs: Point3D) -> Point3D {
+public func min(_ lhs: Point3D, _ rhs: Point3D) -> Point3D {
     Point3D(x: min(lhs.x, rhs.x), y: min(lhs.y, rhs.y), z: min(lhs.z, rhs.z))
 }
 
 /// Returns the maximum between two three-dimensional points, component wise.
-func max(_ lhs: Point3D, _ rhs: Point3D) -> Point3D {
+public func max(_ lhs: Point3D, _ rhs: Point3D) -> Point3D {
     Point3D(x: max(lhs.x, rhs.x), y: max(lhs.y, rhs.y), z: max(lhs.z, rhs.z))
 }

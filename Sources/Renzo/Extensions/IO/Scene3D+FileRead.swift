@@ -62,11 +62,7 @@ extension Scene3D {
         } catch {
             throw .readerCorruptFile
         }
-
-        self.ambientLight = ambientLight
-        self.cameras = cameras
-        self.models = modelRefs
-        self.lights = lights
+        self.init(ambient: ambientLight, cameras: cameras, models: modelRefs, lights: lights)
     }
 
     private static func loadReferences(

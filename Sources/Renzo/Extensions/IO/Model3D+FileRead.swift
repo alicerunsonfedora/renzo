@@ -46,6 +46,6 @@ extension Model3D {
             throw .readerCorruptFile
         }
 
-        self.faces = faces
+        self.init(faces: faces)
     }
 }

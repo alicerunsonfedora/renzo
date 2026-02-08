@@ -5,7 +5,11 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
-import PlaydateKit
+#if Playdate && hasFeature(Embedded) && canImport(PlaydateKit)
+    import PlaydateKit
+#else
+    import Foundation
+#endif
 
 /// A structural representation of a quaternion.
 ///

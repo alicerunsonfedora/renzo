@@ -16,6 +16,12 @@ public struct Size3D: Equatable {
     /// The height component of the size.
     public var height: Float
 
+    public init(width: Float, length: Float, height: Float) {
+        self.width = width
+        self.length = length
+        self.height = height
+    }
+
     public var description: String {
         "Size3D(width: \(width), length: \(length), height: \(height))"
     }

@@ -2,13 +2,13 @@
 //  Model3D.swift
 //  Renzo
 //
-//  Created by Marquis Kurt on 19-12-2025.
+//  Created by Marquis Kurt on 08-02-2026.
 //
 
 /// A representation of a model in three-dimensional space.
 ///
 /// A model typically contains one or more faces that can be drawn onto the screen. They can be generated via code or
-/// loaded from a MDL3D file.
+/// loaded from a Renzo model file.
 ///
 /// To work with the model's faces, simply treat the model as a collection:
 /// ```swift
@@ -68,10 +68,4 @@ extension Model3D: Collection {
     public mutating func sort(by areInIncreasingOrder: @escaping (Element, Element) -> Bool) {
         self.faces.sort(by: areInIncreasingOrder)
     }
-}
-
-public enum Model3DDecoderError: Error {
-    case readerEmptyOrUnknownFile
-    case readerHeaderMismatch
-    case readerCorruptFile
 }

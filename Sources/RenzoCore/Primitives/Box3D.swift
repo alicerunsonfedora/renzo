@@ -5,8 +5,6 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
-import PlaydateKit
-
 /// A representation of a box in three-dimensional space.
 ///
 /// A box can be considered a three-dimensional variant of a PlaydateUIKit `UIRect` or a PlaydateKit `Rect`.

@@ -28,7 +28,12 @@ let package = Package(
     name: "Renzo",
     platforms: [.macOS(.v14)],
     products: [
-        .library(name: "Renzo", targets: ["Renzo"])
+        .library(name: "Renzo", targets: ["Renzo", "RenzoCore"]),
+        .library(name: "RenzoCore", targets: ["RenzoCore"]),
+    ],
+    traits: [
+        .trait(name: "Playdate"),
+        .default(enabledTraits: ["Playdate"]),
     ],
     dependencies: [
         .package(url: "https://source.marquiskurt.net/PDUniverse/PlaydateKit.git", branch: "main"),
@@ -40,15 +45,26 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "RenzoCore",
+            dependencies: [
+                .product(name: "PlaydateKit", package: "PlaydateKit", condition: .when(traits: ["Playdate"]))
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("Embedded", .when(traits: ["Playdate"])),
+                .unsafeFlags(swiftFlags, .when(traits: ["Playdate"])),
+            ]
+        ),
+        .target(
             name: "Renzo",
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
                 .product(name: "PDGraphics", package: "PDKUtils"),
+                "RenzoCore",
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Embedded"),
                 .unsafeFlags(swiftFlags),
             ],
-        )
+        ),
     ]
 )
