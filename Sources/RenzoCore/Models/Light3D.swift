@@ -6,7 +6,7 @@
 //
 
 /// A structure representing a point light in a scene.
-public struct Light3D: Equatable {
+public struct Light3D: Equatable, Hashable, Sendable {
     /// The light's world position.
     public var position: Point3D
 

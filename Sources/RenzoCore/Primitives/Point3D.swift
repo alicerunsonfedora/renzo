@@ -15,7 +15,7 @@ infix operator **
 infix operator **=
 
 /// A representation of a three-dimensional point in space.
-public struct Point3D: Equatable {
+public struct Point3D: Equatable, Hashable, Sendable {
     /// The point along the X axis.
     public var x: Float
 

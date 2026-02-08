@@ -6,7 +6,7 @@
 //
 
 /// A representation of a size in three-dimensional space.
-public struct Size3D: Equatable {
+public struct Size3D: Equatable, Hashable, Sendable {
     /// The width component of the size.
     public var width: Float
 

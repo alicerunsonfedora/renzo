@@ -16,7 +16,7 @@
 ///    drawFace(face)
 /// }
 /// ```
-public struct Model3D {
+public struct Model3D: Equatable, Hashable, Sendable {
     @usableFromInline
     var faces: [TriFace3D]
 
@@ -36,12 +36,6 @@ extension Model3D: Transformable3D {
         for index in faces.indices {
             faces[index].transformBy(transform)
         }
-    }
-}
-
-extension Model3D: Equatable {
-    public static func == (lhs: Model3D, rhs: Model3D) -> Bool {
-        lhs.faces == rhs.faces
     }
 }
 

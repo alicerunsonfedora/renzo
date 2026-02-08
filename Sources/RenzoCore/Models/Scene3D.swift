@@ -9,7 +9,7 @@
 ///
 /// Scenes consist of at least a single camera and can optionally contain models. Rather than storing the models
 /// directly, references are stored that map to an existing model in the game's resources.
-public struct Scene3D: Equatable {
+public struct Scene3D: Equatable, Hashable, Sendable {
     /// The scene's ambient light color.
     public var ambientLight: Float
 

@@ -6,7 +6,7 @@
 //
 
 /// A representation of a camera in three-dimensional space.
-public struct Camera3D: Equatable {
+public struct Camera3D: Equatable, Hashable, Sendable {
     /// The camera's position in the world.
     public var position: Point3D
 

@@ -6,7 +6,7 @@
 //
 
 /// A structure describing a three-dimensional transformation.
-public struct Transform3D: Equatable {
+public struct Transform3D: Equatable, Hashable, Sendable {
     /// The position that the transformation will translate by.
     public var position: Point3D
 

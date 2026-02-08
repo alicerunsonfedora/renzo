@@ -6,7 +6,7 @@
 //
 
 /// A representation of a triangular face in three-dimensional space.
-public struct TriFace3D: Equatable {
+public struct TriFace3D: Equatable, Hashable, Sendable {
     /// The first point of the face.
     public var pointA: Point3D
 

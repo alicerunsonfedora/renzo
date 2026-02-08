@@ -14,7 +14,7 @@
 /// A structural representation of a quaternion.
 ///
 /// Quaternions are typically used to define a series of non-commutative rotations.
-public struct Quaternion: Equatable {
+public struct Quaternion: Equatable, Hashable, Sendable {
     /// The quaternion's W component.
     public var w: Float
 

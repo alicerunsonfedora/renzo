@@ -8,7 +8,7 @@
 /// A representation of a box in three-dimensional space.
 ///
 /// A box can be considered a three-dimensional variant of a PlaydateUIKit `UIRect` or a PlaydateKit `Rect`.
-public struct Box3D: Equatable {
+public struct Box3D: Equatable, Hashable, Sendable {
     /// The origin of the box.
     public var origin: Point3D
 
