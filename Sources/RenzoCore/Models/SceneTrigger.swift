@@ -27,7 +27,10 @@ public typealias TriggerAction = SceneTrigger.Action
 /// interactivity.
 public struct SceneTrigger: Hashable, Sendable {
     /// An enumeration of the conditions in which a trigger can be executed.
-    public enum Condition: Hashable, Sendable, Equatable {
+    public enum Condition: UInt32, Sendable {
+        /// The trigger will never execute.
+        case never
+
         /// Execute the trigger when the player has entered the trigger.
         case playerEnter
 
@@ -39,7 +42,7 @@ public struct SceneTrigger: Hashable, Sendable {
     }
 
     /// An enumeration of the frequencies at which a trigger can be executed.
-    public enum Frequency: Hashable, Sendable, Equatable {
+    public enum Frequency: UInt32, Sendable {
         /// The trigger only executes a single time.
         case once
 

@@ -22,14 +22,23 @@ public struct Scene3D: Equatable, Hashable, Sendable {
     /// The point lights in the scene.
     public var lights: [Light3D]
 
-    public init(ambient: Float = 0.051, cameras: [Camera3D], models: [ModelReference] = [], lights: [Light3D] = []) {
+    public var triggers: [SceneTrigger]
+
+    public init(
+        ambient: Float = 0.051,
+        cameras: [Camera3D],
+        models: [ModelReference] = [],
+        lights: [Light3D] = [],
+        triggers: [SceneTrigger] = []
+    ) {
         self.ambientLight = ambient
         self.cameras = cameras
         self.models = models
         self.lights = lights
+        self.triggers = triggers
     }
 
     public var description: String {
-        "Scene(ambient: \(ambientLight), cameras: \(cameras.count), models: \(models.count), lights: \(lights.count))"
+        "Scene(ambient: \(ambientLight), cameras: \(cameras.count), models: \(models.count), lights: \(lights.count), triggers: \(triggers.count))"
     }
 }

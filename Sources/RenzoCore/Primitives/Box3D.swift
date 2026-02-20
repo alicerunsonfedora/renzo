@@ -26,6 +26,11 @@ extension Box3D {
         "Box3D(origin: \(origin.description), size: \(size.description))"
     }
 
+    /// A box with no origin and size.
+    public static var zero: Box3D {
+        Box3D(origin: .zero, size: .zero)
+    }
+
     /// The centermost point of the box.
     public var center: Point3D {
         Point3D(

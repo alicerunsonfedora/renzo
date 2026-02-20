@@ -7,6 +7,7 @@
 
 import PDFoundation
 import PlaydateKit
+import RenzoCore
 
 extension Scene3D {
     /// Create a scene by reading a scene file from the game's resources.
@@ -24,6 +25,7 @@ extension Scene3D {
         var cameras = [Camera3D]()
         var modelRefs = [ModelReference]()
         var lights = [Light3D]()
+        var triggers = [SceneTrigger]()
         var ambientLight: Float = 0
 
         guard File.fileExists(at: path) else {
@@ -57,12 +59,23 @@ extension Scene3D {
             }
         }
 
+        if FileReadingUtils.expectText("trigs", bytes: 5, in: &file) {
+            let triggersCount = UInt32(reading: file)
+            if triggersCount > 0 {
+                for _ in 1...triggersCount {
+                    let trigger = SceneTrigger(reading: file)
+                    triggers.append(trigger)
+                }
+                guard triggers.count == triggersCount else { throw .readerCorruptFile }
+            }
+        }
+
         do {
             try file.close()
         } catch {
             throw .readerCorruptFile
         }
-        self.init(ambient: ambientLight, cameras: cameras, models: modelRefs, lights: lights)
+        self.init(ambient: ambientLight, cameras: cameras, models: modelRefs, lights: lights, triggers: triggers)
     }
 
     private static func loadReferences(

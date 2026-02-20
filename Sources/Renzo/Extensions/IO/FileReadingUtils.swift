@@ -7,6 +7,7 @@
 
 import PDFoundation
 import PlaydateKit
+import RenzoCore
 
 enum FileReadingUtils {
     static func expectHeader(_ header: String, in file: inout PDFile) -> Bool {
@@ -61,5 +62,65 @@ extension Light3D {
     init(reading file: PDFile) {
         self = Light3D(position: .zero, power: 0, falloff: 0)
         file.read(as: Light3D.self, into: &self)
+    }
+}
+
+extension Box3D {
+    init(reading file: PDFile) {
+        self = .zero
+        file.read(as: Box3D.self, into: &self)
+    }
+}
+
+extension SceneTrigger {
+    init(reading file: PDFile) {
+        self = SceneTrigger(on: .never, in: .zero, perform: [])
+        self.region = Box3D(reading: file)
+
+        let conditionValue = UInt32(reading: file)
+        if let condition = SceneTrigger.Condition(rawValue: conditionValue) {
+            self.condition = condition
+        }
+
+        let frequencyValue = UInt32(reading: file)
+        if let frequency = SceneTrigger.Frequency(rawValue: frequencyValue) {
+            self.frequency = frequency
+        }
+
+        let actionCount = UInt32(reading: file)
+        if actionCount <= 0 { return }
+
+        for _ in 1...actionCount {
+            parseAction(from: file)
+        }
+    }
+
+    private mutating func parseAction(from file: PDFile) {
+        guard let kvSeparator = "=".utf8.first else { return }
+        let strBytes = UInt32(reading: file)
+        let stringValue = String(reading: file, ofLength: Int(strBytes))
+
+        switch stringValue {
+        case "Debug":
+            self.actions.append(.debugging)
+        case "Autosave":
+            self.actions.append(.autosave)
+
+        // NOTE(marquiskurt): Some actions might be represented as a key-value pair, which must be decoded accordingly.
+        case stringValue where stringValue.utf8.contains(kvSeparator):
+            let kvPair = stringValue.utf8.split(separator: kvSeparator, maxSplits: 1)
+            guard let keyUTF8 = kvPair.first, let valueUTF8 = kvPair.last else { return }
+
+            switch (String(decoding: keyUTF8, as: UTF8.self), String(decoding: valueUTF8, as: UTF8.self)) {
+            case ("SetCamera", let cameraValue):
+                guard let camera = Int(cameraValue) else { return }
+                self.actions.append(.cameraSelect(camera))
+            default:
+                break
+            }
+
+        default:
+            break
+        }
     }
 }
