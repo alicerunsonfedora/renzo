@@ -41,8 +41,9 @@ public final class SceneTriggerHandler {
     }
 
     func process(_ trigger: SceneTrigger) {
-        guard var state = states[trigger] else { return }
-        updateState(&state, playerInRegion: trigger.region.contains(point: player?.position ?? .zero))
+        guard let playerPosition = player?.position else { return }
+        var state = states[trigger, default: TriggerState()]
+        updateState(&state, playerInRegion: trigger.region.contains(point: playerPosition))
         guard triggerCanExecute(trigger, with: &state) else {
             states[trigger] = state
             return
