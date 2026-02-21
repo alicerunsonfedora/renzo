@@ -11,7 +11,7 @@ public protocol ScenePlayer: AnyObject {
     var position: Point3D { get set }
 
     /// The player's current world rotation.
-    var rotation: Quaternion { get set }
+    var rotation: Point3D { get set }
 
     /// The player's current world scale.
     var scale: Point3D { get set }
@@ -20,6 +20,6 @@ public protocol ScenePlayer: AnyObject {
 extension ScenePlayer {
     /// The transformation representing the player's spatial data.
     public var transform: Transform3D {
-        Transform3D(position: position, rotation: rotation, scale: scale)
+        Transform3D(position: position, eulerRotation: rotation, scale: scale)
     }
 }
