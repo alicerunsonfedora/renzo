@@ -11,7 +11,7 @@ import PlaydateKit
 extension Model3D {
     /// Create a 3D model by reading a file from the game's resources.
     /// - Parameter name: The name of the model to load from the game's resources.
-    public init(named name: String) throws(Model3DDecoderError) {
+    public init(named name: String) throws(RenzoBinaryFileReadError) {
         guard let path = Bundle.main.path(forResource: name, ofType: .model) else {
             throw .readerEmptyOrUnknownFile
         }
@@ -19,7 +19,7 @@ extension Model3D {
     }
     /// Create a 3D model by loading an MDL3D file (`.model`).
     /// - Parameter path: The file path of the model on the Playdate's disk.
-    public init(reading path: String) throws(Model3DDecoderError) {
+    public init(reading path: String) throws(RenzoBinaryFileReadError) {
         var faces = [TriFace3D]()
 
         guard File.fileExists(at: path) else {

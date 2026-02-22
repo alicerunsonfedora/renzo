@@ -12,7 +12,7 @@ import RenzoCore
 extension Scene3D {
     /// Create a scene by reading a scene file from the game's resources.
     /// - Parameter name: The name of the scene to load.
-    public init(named name: String) throws(Model3DDecoderError) {
+    public init(named name: String) throws(RenzoBinaryFileReadError) {
         guard let path = Bundle.main.path(forResource: name, ofType: .scene) else {
             throw .readerEmptyOrUnknownFile
         }
@@ -21,7 +21,7 @@ extension Scene3D {
 
     /// Create a scene by reading a `.pdscene` file from the game's resources.
     /// - Parameter path: The path to the scene file to read.
-    public init(reading path: String) throws(Model3DDecoderError) {
+    public init(reading path: String) throws(RenzoBinaryFileReadError) {
         var cameras = [Camera3D]()
         var modelRefs = [ModelReference]()
         var lights = [Light3D]()
@@ -80,7 +80,7 @@ extension Scene3D {
 
     private static func loadReferences(
         from file: inout File.FileHandle
-    ) throws(Model3DDecoderError) -> [ModelReference] {
+    ) throws(RenzoBinaryFileReadError) -> [ModelReference] {
         let refModelsCount = UInt32(reading: file)
         if refModelsCount <= 0 { return [] }
 
@@ -102,7 +102,7 @@ extension Scene3D {
         return modelRefs
     }
 
-    private static func loadCameras(from file: inout File.FileHandle) throws(Model3DDecoderError) -> [Camera3D] {
+    private static func loadCameras(from file: inout File.FileHandle) throws(RenzoBinaryFileReadError) -> [Camera3D] {
         guard FileReadingUtils.expectText("cam", bytes: 3, in: &file) else {
             throw .readerCorruptFile
         }
