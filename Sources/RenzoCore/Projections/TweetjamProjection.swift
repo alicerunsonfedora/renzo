@@ -5,8 +5,6 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
-import PlaydateKit
-
 /// A simple projection that assumes a face sits right in front of the camera at a given scale.
 ///
 /// This projection is dervied from a simple Tweetjam algorithm used to quickly render a 3D model. While this can be

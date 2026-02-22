@@ -7,17 +7,6 @@
 
 import PDGraphics
 
-/// A protocol that defines a projection from three-dimensional space into two-dimensional space.
-public protocol Projection3D: AnyObject {
-    /// Project a point from three-dimensional space into its two-dimensional space counterpart.
-    ///
-    /// > Important: Projections assume that the point is in the correct world position. Depending on the
-    /// > implementation, you may need to pre-process the point before projecting it.
-    ///
-    /// - Parameter point: The point to project into two-dimensional space.
-    func project(_ point: Point3D) -> Point2D
-}
-
 extension Projection3D {
     /// Project a face from three-dimensional space into its two-dimensional space counterpart.
     /// - Parameter face: The face to project into two-dimensional space.
@@ -26,6 +15,13 @@ extension Projection3D {
         let pointB = project(face.pointB)
         let pointC = project(face.pointC)
         return TriFace2D(a: pointA, b: pointB, c: pointC)
+    }
+
+    /// Project a face from three-dimensional space into its two-dimensional space counterpart.
+    /// - Parameter face: The face to project into two-dimensional space.
+    public func project(_ face: TriFace3D) -> PGTriangle {
+        let projection: TriFace2D = self.project(face)
+        return PGTriangle(projection)
     }
 
     /// Project a set of faces from three-dimensional space into its two-dimensional space counterparts.

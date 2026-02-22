@@ -15,7 +15,7 @@ extension Graphics {
     /// - Parameter color: The fill color of the triangle.
     @available(*, deprecated, message: "Use PGFillTriangle from PDGraphics.")
     public static func fillTriangle(_ triangle: TriFace2D, color: Color = .black) {
-        PGFillTriangle(triangle, color: color)
+        PGFillTriangle(PGTriangle(triangle), color: color)
     }
 
     /// Draws a wireframe triangle at the points provided by the face.
@@ -27,8 +27,8 @@ extension Graphics {
     /// - Parameter triangle: The triangle to draw on the screen.
     /// - Parameter lineWidth: The width of the lines used to draw the triangle.
     public static func drawTriangle(_ triangle: TriFace2D, lineWidth: Int = 1) {
-        Graphics.drawLine(Line(start: triangle.pointA, end: triangle.pointB), lineWidth: lineWidth)
-        Graphics.drawLine(Line(start: triangle.pointA, end: triangle.pointC), lineWidth: lineWidth)
-        Graphics.drawLine(Line(start: triangle.pointC, end: triangle.pointB), lineWidth: lineWidth)
+        Graphics.drawLine(Line(start: Point(triangle.pointA), end: Point(triangle.pointB)), lineWidth: lineWidth)
+        Graphics.drawLine(Line(start: Point(triangle.pointA), end: Point(triangle.pointC)), lineWidth: lineWidth)
+        Graphics.drawLine(Line(start: Point(triangle.pointC), end: Point(triangle.pointB)), lineWidth: lineWidth)
     }
 }

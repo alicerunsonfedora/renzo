@@ -102,7 +102,7 @@ open class SceneRenderer {
     open func drawModel(_ model: Model3D, transformedBy transform: Transform3D, into frameBuffer: inout PGBuffer) {
         for face in model {
             let worldFace = face.transformedBy(transform)
-            let projectedFace = projection.project(worldFace)
+            let projectedFace: PGTriangle = projection.project(worldFace)
             if allowsBackfaceCulling, projectedFace.signedArea >= 0 {
                 continue
             }
