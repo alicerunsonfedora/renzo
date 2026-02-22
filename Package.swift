@@ -24,6 +24,11 @@ var swiftFlags = [
     swiftFlags.append(contentsOf: ["-Xfrontend", "-gline-tables-only"])
 #endif
 
+let playdateSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("Embedded", .when(traits: ["Playdate"])),
+    .unsafeFlags(swiftFlags, .when(traits: ["Playdate"]))
+]
+
 let package = Package(
     name: "Renzo",
     platforms: [.macOS(.v14)],
@@ -49,10 +54,7 @@ let package = Package(
             dependencies: [
                 .product(name: "PlaydateKit", package: "PlaydateKit", condition: .when(traits: ["Playdate"]))
             ],
-            swiftSettings: [
-                .enableExperimentalFeature("Embedded", .when(traits: ["Playdate"])),
-                .unsafeFlags(swiftFlags, .when(traits: ["Playdate"])),
-            ]
+            swiftSettings: playdateSettings
         ),
         .target(
             name: "Renzo",
@@ -61,10 +63,7 @@ let package = Package(
                 .product(name: "PDGraphics", package: "PDKUtils"),
                 "RenzoCore",
             ],
-            swiftSettings: [
-                .enableExperimentalFeature("Embedded"),
-                .unsafeFlags(swiftFlags),
-            ],
+            swiftSettings: playdateSettings
         ),
     ]
 )
