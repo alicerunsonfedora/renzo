@@ -7,13 +7,15 @@ Playdate app or game through PlaydateKit. Load three-dimensional scenes
 and models from files or generated structures, and render them with
 various projection mechanisms.
 
+> **Warning**  
+> Renzo is in a pre-release state. Features, capabilities, and API design
+> are not finalized. Use at your own risk!
+
 **Renzo** also has a companion extension for Blender that lets you export
 models and scenes into the `.model` and `.pdscene` file formats that Renzo
 can use to render 3D content.
 
-> **Important** 
-> Renzo is a pre-release library and is not production ready. Use at your
-> own risk!
+[View companion extension &rsaquo;](https://source.marquiskurt.net/PDUniverse/renzoutils)
 
 ## Getting started
 
@@ -66,36 +68,6 @@ final class Game: PlaydateGame {
     }
 }
 ```
-
-## Performance considerations
-
-While Renzo tries to be as performant as reasonably possible under
-Embedded Swift, the default parameters and configurations may not be
-enough, depending on your use case. You may want to consider some of the
-following options to improve performance:
-
-- By default, Renzo handles all Playdate color types, including XOR. If
-  you don't use the XOR color in your game and want to skip over these
-  checks, you can remove the `AllowXOR` Swift package trait from your
-  dependency definition:
-  
-  ```swift
-  dependencies: [
-      .package(
-          url: "https://source.marquiskurt.net/PDUniverse/Renzo.git",
-          branch: "main",
-          traits: [])
-  ]
-  ```
-  
-  Doing so will skip compiling any checks for XOR and handling XOR cases
-  when drawing triangles.
-- If you are writing your own scene renderer, consider using the tools
-  provided in `RenzoGraphics`. While the default SDK functions for drawing
-  shapes such as triangles and rectangles generally suffice, they tend to
-  be less performant. `RenzoGraphics` provides more performant versions of
-  these functions; the `SceneRenderer`, for example, uses `RGFillTriangle`
-  instead of `Graphics.fillTriangle` to draw model faces.
 
 ## License
 
