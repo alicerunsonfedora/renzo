@@ -5,7 +5,11 @@
 //  Created by Marquis Kurt on 19-12-2025.
 //
 
-import PlaydateKit
+#if Playdate && hasFeature(Embedded) && canImport(PlaydateKit)
+    import PlaydateKit
+#else
+    import Foundation
+#endif
 
 /// A projection method that projects points relative the position and rotation of a camera in three-dimensional space.
 public class PerspectiveProjection: Projection3D {
@@ -22,20 +26,20 @@ public class PerspectiveProjection: Projection3D {
     public private(set) var fovMult: Float
 
     /// The camera's frame.
-    public var frame: Rect {
+    public var frame: Box2D {
         didSet {
-            self.fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(frame.width)
+            self.fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(frame.size.width)
         }
     }
 
-    /// Create a projection from a camera in a given frame.
+    /// Create a projection from a camera in a given render region.
     /// - Parameter camera: The camera from which points will be projected.
-    /// - Parameter rect: The camera's frame.
-    public init(camera: Camera3D, rect: Rect) {
-        self.fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(rect.width)
+    /// - Parameter rect: The region describing the surface to render to.
+    public init(camera: Camera3D, in region: Box2D) {
+        self.fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(region.size.width)
         self.cameraRotation = Quaternion(euler: camera.rotation).inverted()
         self.camera = camera
-        self.frame = rect
+        self.frame = region
     }
 
     public func project(_ point: Point3D) -> Point2D {
@@ -59,6 +63,6 @@ public class PerspectiveProjection: Projection3D {
 
     func didSetCamera() {
         cameraRotation = Quaternion(euler: camera.rotation).inverted()
-        fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(frame.width)
+        fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(frame.size.width)
     }
 }

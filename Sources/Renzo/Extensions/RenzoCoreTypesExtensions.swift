@@ -31,3 +31,15 @@ extension TriFace2D {
         self.init(a: Point2D(pgTriangle.pointA), b: Point2D(pgTriangle.pointB), c: Point2D(pgTriangle.pointC))
     }
 }
+
+extension Rect {
+    public init(_ box2D: Box2D) {
+        self.init(origin: Point(box2D.origin), width: box2D.size.width, height: box2D.size.height)
+    }
+}
+
+extension Box2D {
+    public init(_ rect: Rect) {
+        self.init(origin: Point2D(rect.origin), size: Size2D(width: rect.width, height: rect.height))
+    }
+}

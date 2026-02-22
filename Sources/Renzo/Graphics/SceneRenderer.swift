@@ -250,7 +250,7 @@ open class SceneRenderer {
 
     private func didChangeFrame() {
         if let projection = projection as? PerspectiveProjection {
-            projection.frame = self.frame
+            projection.frame = Box2D(self.frame)
         }
     }
 }
