@@ -30,3 +30,10 @@ Renzo is designed for 3D content that relies on static camera shots,
 similar to games such as _Alone in the Dark_, early _Resident Evil_ titles,
 and _Lorelei and the Laser Eyes_. However, Renzo is capable of displaying
 general 3D models and very basic use cases.
+
+## Topics
+
+### Get started with Renzo
+
+- <doc:Filesystem>
+- ``SceneRenderer``

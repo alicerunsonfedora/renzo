@@ -14,14 +14,6 @@ import PlaydateKit
 /// When a scene is rendered, it will take the frame dimensions into account, using the projection you specify. Any
 /// model references that already have a data counterpart are displayed with backfaces culled, adding them as scene
 /// objects. If a scene has any point lights present, models will be lit using a basic diffuse lighting algorithm.
-///
-/// ### Sorting
-/// When the scene uses a ``PerspectiveProjection``, objects and faces can be sorted to ensure their Z order appears
-/// correctly relative to the current camera in use. Scene objects and their model faces are sorted by distance from
-/// the camera. By default, the scene will re-sort objects and faces whenever the ``currentCameraIndex`` changes; call
-/// ``setNeedsFaceSorting()`` and/or ``setNeedsObjectSorting()``, respectively, to notify the scene to sort again. For
-/// example, you may need to call ``setNeedsObjectSorting()`` if one of the scene objects continuously moves, like a
-/// player model.
 open class SceneRenderer {
     /// Whether the scene renderer should cull backfaces.
     public var allowsBackfaceCulling: Bool = true
