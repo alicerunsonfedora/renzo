@@ -67,13 +67,13 @@ extension Transformable3D {
     }
 
     /// Returns a copy of the object rotated by an Euler (XYZ) rotation.
-    /// - Parameter rotation: The Euler rotation to rotate the object by.
+    /// - Parameter euler: The Euler rotation to rotate the object by.
     public func rotatedBy(euler: Point3D) -> Self {
         self.transformedBy(Transform3D(eulerRotation: euler))
     }
 
     /// Rotate the object by an Euler (XYZ) rotation.
-    /// - Parameter rotation: The Euler rotation to rotate the object by.
+    /// - Parameter euler: The Euler rotation to rotate the object by.
     public mutating func rotateBy(euler: Point3D) {
         self.transformBy(Transform3D(eulerRotation: euler))
     }

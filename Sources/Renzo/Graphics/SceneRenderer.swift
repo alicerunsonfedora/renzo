@@ -29,12 +29,14 @@ open class SceneRenderer {
 
     /// Whether the renderer needs to sort the model's faces relative to the current camera position.
     ///
-    /// This can be enabled whenever the projection is a ``PerspectiveProjection`` through ``setNeedsFaceSorting()``.
+    /// This can be enabled whenever the projection is a ``RenzoCore/PerspectiveProjection`` through
+    /// ``setNeedsFaceSorting()``.
     public private(set) var needsFaceSorting = false
 
     /// Whether the renderer needs to sort the objects in the scene relative to the current camera position.
     ///
-    /// This can be enabled whenever the projection is a ``PerspectiveProjection`` through ``setNeedsObjectSorting()``.
+    /// This can be enabled whenever the projection is a ``RenzoCore/PerspectiveProjection`` through
+    /// ``setNeedsObjectSorting()``.
     public private(set) var needsObjectSorting = false
 
     /// The projection used to project scene objects to screen space.
@@ -154,7 +156,7 @@ open class SceneRenderer {
     /// Sets the renderer's camera to a specified index in the scene's camera list.
     ///
     /// > Note: This method is only applicable to scene renderers whose ``projection`` property is a
-    /// > ``PerspectiveProjection``.
+    /// > ``RenzoCore/PerspectiveProjection``.
     ///
     /// - Parameter index: The index of the camera to use.
     public func setCameraIfAvailable(_ index: CameraIndex) {

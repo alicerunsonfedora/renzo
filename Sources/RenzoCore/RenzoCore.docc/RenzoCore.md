@@ -32,3 +32,4 @@ Renzo provides multiple facilities that allow you to treat it as a light
 
 - <doc:Triggers>
 - ``ScenePlayer``
+- ``AlignedBox``

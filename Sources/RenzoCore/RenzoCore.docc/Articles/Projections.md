@@ -37,8 +37,8 @@ method, which defines how the 3D point is to be projected into 2D space.
 
 ## Using a projection with the renderer
 
-The ``SceneRenderer`` allows for setting a custom projection. To do so, use
-the ``SceneRenderer/init(scene:projection:frame:)`` initializer:
+The `SceneRenderer` allows for setting a custom projection. To do so, use
+the `SceneRenderer.init(scene:projection:frame:)` initializer:
 
 ```swift
 class MyProjection: Projection3D { ... }
@@ -50,7 +50,7 @@ let renderer = SceneRenderer(scene: scene, projection: myProjection)
 ```
 
 > Some scene renderer methods such as
-> ``SceneRenderer/setCameraIfAvailable(_:)`` are only applicable to the
+> `SceneRenderer/setCameraIfAvailable(_:)` are only applicable to the
 > ``PerspectiveProjection`` projection type.
 
 ## Topics

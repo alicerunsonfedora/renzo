@@ -8,7 +8,7 @@
     @Available("iOS", introduced: "17.0")
     @Available("iPadOS", introduced: "17.0")
 }
-	
+
 Create and display 3D content in your Playdate app or game.
 
 ## Overview
@@ -33,7 +33,7 @@ general 3D models and very basic use cases.
 
 ## Topics
 
-### Get started with Renzo	
+### Get started with Renzo
 
 - <doc:Filesystem>
 - ``SceneRenderer``

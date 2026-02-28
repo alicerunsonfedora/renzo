@@ -34,7 +34,7 @@ public class PerspectiveProjection: Projection3D {
 
     /// Create a projection from a camera in a given render region.
     /// - Parameter camera: The camera from which points will be projected.
-    /// - Parameter rect: The region describing the surface to render to.
+    /// - Parameter region: The region describing the surface to render to.
     public init(camera: Camera3D, in region: Box2D) {
         self.fovMult = tanf(camera.fieldOfView / 2) * 2 * Float(region.size.width)
         self.cameraRotation = Quaternion(euler: camera.rotation).inverted()
