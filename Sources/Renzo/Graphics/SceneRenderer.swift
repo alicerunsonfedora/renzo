@@ -15,6 +15,9 @@ import PlaydateKit
 /// model references that already have a data counterpart are displayed with backfaces culled, adding them as scene
 /// objects. If a scene has any point lights present, models will be lit using a basic diffuse lighting algorithm.
 open class SceneRenderer {
+    /// An alias referring to the position of a camera in a scene.
+    public typealias CameraIndex = [Camera3D].Index
+
     /// Whether the scene renderer should cull backfaces.
     public var allowsBackfaceCulling: Bool = true
 
@@ -153,7 +156,7 @@ open class SceneRenderer {
     /// > ``PerspectiveProjection``.
     ///
     /// - Parameter index: The index of the camera to use.
-    public func setCameraIfAvailable(_ index: [Camera3D].Index) {
+    public func setCameraIfAvailable(_ index: CameraIndex) {
         guard let projection = projection as? PerspectiveProjection,
             scene.cameras.indices.contains(index)
         else { return }
