@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoCore
 
 let displayWidth = Float(Display.width)
 let displayHeight = Float(Display.height)

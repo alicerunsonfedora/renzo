@@ -7,6 +7,7 @@
 
 import PlaydateKit
 import Renzo
+import RenzoCore
 
 class DemoScene {
     let renderer: SceneRenderer

@@ -6,6 +6,7 @@
 //
 
 import PDGraphics
+import RenzoCore
 
 extension Projection3D {
     /// Project a face from three-dimensional space into its two-dimensional space counterpart.

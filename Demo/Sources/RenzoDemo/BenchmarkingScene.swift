@@ -9,6 +9,7 @@ import PDFoundation
 import PDGraphics
 import PlaydateKit
 import Renzo
+import RenzoCore
 
 private let BENCHMARK_END_FRAME = 700
 

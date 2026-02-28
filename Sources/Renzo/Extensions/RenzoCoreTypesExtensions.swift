@@ -7,6 +7,7 @@
 
 import PDGraphics
 import PlaydateKit
+import RenzoCore
 
 extension Point2D {
     public init(_ pdkPoint: PlaydateKit.Point) {

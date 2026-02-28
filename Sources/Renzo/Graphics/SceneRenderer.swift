@@ -8,6 +8,7 @@
 import PDFoundation
 import PDGraphics
 import PlaydateKit
+import RenzoCore
 
 /// A renderer capable of rendering three-dimensional scenes.
 ///

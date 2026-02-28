@@ -6,6 +6,7 @@
 //
 
 import PlaydateKit
+import RenzoCore
 
 extension PerspectiveProjection {
     /// Create a projection from a camera in a given frame.
