@@ -2,7 +2,7 @@
 
 @Metadata {
     @PageColor(red)
-    @PageImage(purpose: icon, source: "Renzo", alt: "The Renzo framework logo")
+    @PageImage(purpose: icon, source: "RenzoCore", alt: "The Renzo framework logo")
     @Available("Playdate", introduced: "3.0.1")
     @Available("macOS", introduced: "14.0")
     @Available("iOS", introduced: "17.0")
