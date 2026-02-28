@@ -16,6 +16,7 @@ xcodebuild docbuild -scheme Renzo \
 xcrun docc merge $(find /tmp/derivedData -type d -name 'Renzo*.doccarchive') \
   --synthesized-landing-page-name Renzo \
   --synthesized-landing-page-kind SDK \
+  --synthesized-landing-page-topics-style list \
   --output-path /tmp/docc/RenzoSDK.doccarchive
 
 $(xcrun -f docc -toolchain "swift latest") process-archive \

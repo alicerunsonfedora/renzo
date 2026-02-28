@@ -89,9 +89,6 @@ extension Box3D {
 }
 
 /// A representation of an axis-aligned bounding box.
-///
-/// Axis aligned bounding boxes are typically used to check whether three-dimensional objects are colliding with each
-/// other.
 public typealias AlignedBox = Box3D
 
 extension AlignedBox {
