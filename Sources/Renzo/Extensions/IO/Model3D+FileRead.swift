@@ -18,7 +18,8 @@ extension Model3D {
         }
         self = try Model3D(reading: path)
     }
-    /// Create a 3D model by loading an MDL3D file (`.model`).
+
+    /// Create a 3D model by loading an Playdate model file (`.pdmodel`).
     /// - Parameter path: The file path of the model on the Playdate's disk.
     public init(reading path: String) throws(RenzoBinaryFileReadError) {
         var faces = [TriFace3D]()

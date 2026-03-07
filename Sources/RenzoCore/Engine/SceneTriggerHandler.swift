@@ -29,8 +29,14 @@ public final class SceneTriggerHandler {
 
     private var states = [SceneTrigger: TriggerState]()
 
+    /// Initialize a handler for a set of triggers.
     public init(triggers: [SceneTrigger]) {
         self.triggers = triggers
+    }
+
+    /// Initialize a handler for a given scene.
+    public convenience init(from scene: Scene3D) {
+        self.init(triggers: scene.triggers)
     }
 
     /// Processes all the triggers in the current handler.

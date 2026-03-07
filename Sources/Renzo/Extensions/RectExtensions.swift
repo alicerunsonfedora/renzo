@@ -12,12 +12,14 @@ let displayWidth = Float(Display.width)
 let displayHeight = Float(Display.height)
 
 extension Rect {
+    /// A rectangle that encompasses the entirety of the Playdate's display.
     public static var display: Rect {
         Rect(origin: .zero, width: displayWidth, height: displayHeight)
     }
 }
 
 extension Box2D {
+    /// A box that encompasses the entirety of the Playdate's display.
     public static var display: Box2D {
         Box2D(origin: .zero, size: Size2D(width: displayWidth, height: displayHeight))
     }

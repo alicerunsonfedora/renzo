@@ -22,6 +22,7 @@ public struct Scene3D: Equatable, Hashable, Sendable {
     /// The point lights in the scene.
     public var lights: [Light3D]
 
+    /// The triggers in the scene.
     public var triggers: [SceneTrigger]
 
     public init(

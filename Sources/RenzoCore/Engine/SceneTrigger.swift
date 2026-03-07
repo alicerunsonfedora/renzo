@@ -62,9 +62,16 @@ public struct SceneTrigger: Hashable, Sendable {
         case cameraSelect(Int)
     }
 
+    /// The region that defines where the trigger can be activated.
     public var region: Box3D
+
+    /// The actions that this trigger performs.
     public var actions: [Action]
+
+    /// The condition by which this trigger can execute.
     public var condition: Condition
+
+    /// How often the trigger can be re-invoked.
     public var frequency: Frequency = .once
 
     public init(
