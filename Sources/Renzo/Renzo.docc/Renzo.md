@@ -13,15 +13,25 @@ Create and display 3D content in your Playdate app or game.
 
 ## Overview
 
-With Renzo, you can display and interact with three-dimensional
-content in your Playdate app or game. Load scenes and models from files or
-generated structures, and render them with various projection mechanisms.
-Renzo also sports cross-platform capabilities through RenzoCore, letting
-you display your models and scenes with other frameworks such as
-RealityKit. Renzo also provides a companion extension for Blender that
-allows you to create models and scenes designed for Renzo easily.
+@Row(numberOfColumns: 5) {
+    @Column(size: 3) {
+        With Renzo, you can display and interact with three-dimensional
+        content in your Playdate app or game. Load scenes and models from
+        files or generated structures, and render them with various
+        projection mechanisms. Renzo also sports cross-platform
+        capabilities through RenzoCore, letting you display your models
+        and scenes with other frameworks such as RealityKit. Renzo also
+        provides a companion extension for Blender that allows you to
+        create models and scenes designed for Renzo easily.
+    }
+    @Column(size: 2) {
+        @Image(source: "RenzoDemo", alt: "A sample scene rendered with Renzo")
+    }
+}
 
-> Warning: Renzo is in a pre-release state. Features, capabilities, and API
+
+
+> Important: Renzo is in a pre-release state. Features, capabilities, and API
 > design are not finalized. Use at your own risk!
 
 ### Use cases
@@ -35,5 +45,6 @@ general 3D models and very basic use cases.
 
 ### Get started with Renzo
 
+- <doc:BlenderPlugin>
 - <doc:Filesystem>
 - ``SceneRenderer``
